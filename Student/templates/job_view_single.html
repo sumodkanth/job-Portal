@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'studentindex.html' %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+<div class="col-12 grid-margin stretch-card">
+    <div class="card" style="background-color: gray;">
+        <div class="card-body">
+            <h4 class="card-title" style="color: black;">Job Details</h4>
+            <p class="card-description"></p>
+        <form class="forms-sample" method="post" action="{% url 'job_apply' job_id=job_data.JobId %}" enctype="multipart/form-data">
+            {% csrf_token %}
+                <div class="card-body">
+                    <h4 class="card-title"></h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Title :</label>
+                                <div class="col-sm-9">
+                                    <h5 class="col-form-label">{{job_data.Title}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Company Name :</label>
+                                <div class="col-sm-9">
+                                    <h5 class="col-form-label">{{job_data.Company}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Location :</label>
+                                <div class="col-sm-9">
+                                    <h5 class="col-form-label">{{job_data.Location}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Qualification :</label>
+                                <div class="col-sm-9">
+                                    <h5 class="col-form-label">{{job_data.Qualification}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Email :</label>
+                                <div class="col-sm-9">
+                                    <h5 class="col-form-label">{{job_data.Email}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Description:</label>
+
+                                <div class="col-sm-9">
+                                    <label class="col-form-label-sm"><h6>{{job_data.Description}}</h6></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add the job application status bar here -->
+                    <div class="progress" style="margin-bottom: 20px;">
+                        {% if applied %}
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                        {% else %}
+                            <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Not Applied</div>
+                        {% endif %}
+                    </div>
+
+
+                    <div class="btn-group" role="group">
+                        <button type="submit" name="status" value="selected" class="btn btn-primary mr-2 btn-rounded">Selected</button>
+                        <button type="submit" name="status" value="rejected" class="btn btn-danger mr-2 btn-rounded">Rejected</button>
+                    </div>
+
+                    {% if applied %}
+                        <button class="btn btn-primary mr-2 btn-rounded" disabled>Applied</button>
+                    {% else %}
+
+                    <label class="btn btn-secondary btn-rounded">
+                            Upload Resume to Apply (.pdf)
+                            <input id="ResumeInput" name="resume" type="file" style="display: none;" onchange="displayFileName(this)">
+                        </label>
+                        <span id="SelectedFileName"></span><br><br>
+                    <button  class="btn btn-primary mr-2 btn-rounded" id="applybutton">Submit Application</button>
+                    {% endif %}
+
+
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function updateStatus(status) {
+        // Update the progress bar and handle the status (selected or rejected)
+        var progressBar = document.querySelector('.progress-bar');
+        if (status === 'selected') {
+            progressBar.style.width = '100%';
+            progressBar.classList.remove('bg-danger');
+            progressBar.classList.add('bg-info');
+        } else if (status === 'rejected') {
+            progressBar.style.width = '100%';
+            progressBar.classList.remove('bg-info');
+            progressBar.classList.add('bg-danger');
+        }
+    }
+    function displayFileName(input) {
+        var fileName = input.files[0].name;
+        document.getElementById('SelectedFileName').innerHTML = 'Selected File: ' + fileName;
+    }
+</script>
+
+{% endblock %}
+
+
+</body>
+</html>
