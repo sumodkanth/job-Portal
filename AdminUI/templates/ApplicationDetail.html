@@ -63,18 +63,9 @@
             <img class="img-lg rounded-circle" src="{{data.Image.url}}" width="100px">
         </div>
 
-        <div class="progress" style="margin-bottom: 20px;">
-                {% if applied %}
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">Applied</div>
-                {% else %}
-                    <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Not Applied</div>
-                {% endif %}
-        </div>
-    <!-- Buttons for Selected and Rejected -->
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-primary mr-2 btn-rounded" onclick="updateStatus('selected')">Selected</button>
-                        <button type="button" class="btn btn-danger mr-2 btn-rounded" onclick="updateStatus('rejected')">Rejected</button>
-                    </div>
+
+
+
 
 
 </div>

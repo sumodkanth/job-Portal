@@ -6,6 +6,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib.auth.decorators import login_required
 from AdminUI.models import StudentDB, DepartmentDB, CourseDB, JobsDB, JobApplications, newsDB, placed_studdb
+from .forms import SelectionStatusForm
+from django.contrib.auth.decorators import login_required
 import FacultyUI.views
 import AdminUI.views
 import random
@@ -178,45 +180,43 @@ def jobs_view(request):
     return render(request, "jobs_view.html", {'job_data': job_data})
 
 
-# def jobs_view_single(request, job_id):
-#     if 'username' in request.session:
-#         stud_id = request.session["username"]
-#         job_data = JobsDB.objects.get(JobId=job_id)
-#         applied = JobApplications.objects.filter(JobId=job_id, StudentId=stud_id).exists()
-#         # messages.success(request, 'You have successfully applied for the job!')
-#         return render(request, "job_view_single.html", {'job_data': job_data, 'applied': applied})
-#     else:
-#         messages.error(request, 'Please log in to view this page.')
-#         return render(request, "main_login.html")
 def jobs_view_single(request, job_id):
     if 'username' in request.session:
         stud_id = request.session["username"]
         job_data = JobsDB.objects.get(JobId=job_id)
         applied = JobApplications.objects.filter(JobId=job_id, StudentId=stud_id).exists()
-
-        if request.method == 'POST':
-            # Check if the form is submitted for updating status or applying
-            status = request.POST.get('status', None)
-            resume_file = request.FILES.get('resume')
-
-            if status and status in ['selected', 'rejected']:
-                # Handle the status (selected or rejected) here
-                # You can update the database or perform any necessary actions
-                messages.success(request, f'Application marked as {status.capitalize()}!')
-                return redirect('job_view_single', job_id=job_id)
-            elif resume_file:
-                # Handle the resume file upload
-                # For example, you can save the file to the database or filesystem
-                # and create a JobApplications object
-                JobApplications.objects.create(JobId=job_id, StudentId=stud_id, Resume=resume_file)
-                messages.success(request, 'Application submitted successfully!')
-                return redirect('job_view_single', job_id=job_id)
-
+        # messages.success(request, 'You have successfully applied for the job!')
         return render(request, "job_view_single.html", {'job_data': job_data, 'applied': applied})
     else:
         messages.error(request, 'Please log in to view this page.')
         return render(request, "main_login.html")
 
+# def jobs_view_single(request, job_id):
+#     if 'username' in request.session:
+#         stud_id = request.session["username"]
+#         job_data = JobsDB.objects.get(JobId=job_id)
+#         applied = JobApplications.objects.filter(JobId=job_id, StudentId=stud_id).exists()
+#
+#         if request.method == 'POST':
+#             status = request.POST.get('status')
+#             resume_file = request.FILES.get('resume')
+#
+#             if status in ['selected', 'rejected']:
+#                 # Handle status update
+#                 # You can update the database or perform any necessary actions
+#                 messages.success(request, f'Application marked as {status.capitalize()}!')
+#                 return redirect('job_view_single', job_id=job_id)
+#             elif resume_file:
+#                 # Handle resume file upload
+#                 # For example, save the file to the database or filesystem
+#                 JobApplications.objects.create(JobId=job_id, StudentId=stud_id, Resume=resume_file)
+#                 messages.success(request, 'Application submitted successfully!')
+#                 return redirect('job_view_single', job_id=job_id)
+#
+#         return render(request, "job_view_single.html", {'job_data': job_data, 'applied': applied})
+#     else:
+#         messages.error(request, 'Please log in to view this page.')
+#         return render(request, "main_login.html")
 
 
 def job_apply(request, job_id):
@@ -346,3 +346,16 @@ def update_password(request):
             messages.error(request, 'Passwords do not match. Please try again.')
 
     return render(request, 'entermail1.html')  # Replace 'your_template.html' with the actual template name
+
+@login_required
+def selection_status_view(request):
+    if request.method == 'POST':
+        form = SelectionStatusForm(request.POST)
+        if form.is_valid():
+            selection_status = form.save(commit=False)
+            selection_status.user = request.user  # Set the current user
+            selection_status.save()
+            return redirect('success_url')  # Redirect to a success page
+    else:
+        form = SelectionStatusForm()
+    return render(request, 'job_view_single.html', {'form': form})

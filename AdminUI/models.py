@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.conf import settings
 
 # Create your models here.
 
@@ -79,3 +79,4 @@ class placed_studdb(models.Model):
     p_des = models.CharField(max_length=50, null=True, blank=True)
     p_dis = models.CharField(max_length=50, null=True, blank=True)
     p_img = models.ImageField(upload_to="placement", null=True, blank=True)
+

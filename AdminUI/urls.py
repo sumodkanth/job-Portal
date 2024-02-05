@@ -46,4 +46,5 @@ urlpatterns = [
     path('add_placed/', views.add_placed, name="add_placed"),
     path('display_placed/', views.display_placed,name="display_placed"),
     path('placed_delete/<int:data_id>/', views.placed_delete,name="placed_delete"),
+
 ]

@@ -2,7 +2,7 @@ from django.urls import path
 
 from Student import views
 from django.contrib.auth import views as auth_views
-
+from .views import selection_status_view
 urlpatterns = [
     path('', views.main_page, name="main_page"),
     path('recruiter/', views.recruiter, name="recruiter"),
@@ -36,7 +36,7 @@ urlpatterns = [
     path('verify_otp/',views.verify_otp,name='verify_otp'),
     path('newpass/',views.newpass,name='newpass'),
     path('update_password/',views.update_password,name='update_password'),
-    
+    path('selection-status/', selection_status_view, name='selection_status_view'),
 
 
 ]
