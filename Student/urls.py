@@ -37,6 +37,6 @@ urlpatterns = [
     path('newpass/',views.newpass,name='newpass'),
     path('update_password/',views.update_password,name='update_password'),
     path('selection-status/', selection_status_view, name='selection_status_view'),
-
-
+    path('status_update/<str:job_update>/', views.status_update, name='status_update_page'),
+    path('save-status/', views.save_status, name='save_status'),
 ]

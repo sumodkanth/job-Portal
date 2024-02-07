@@ -40,6 +40,12 @@
         <button class="btn btn-primary mr-2" type="submit">Update</button>
         <a class="btn btn-success mr-2" href="{% url 'job_applications' job_id=job_data.JobId %}">View Applications</a>
     </form>
+            <div><br>
+        <!-- Add a button for status update -->
+            <a href="{% url 'status_update_page' job_update=job_data.Company %}">
+                <button class="btn btn-danger mr-2 btn-rounded">View Status</button>
+            </a>
+        </div>
 </div>
 </body>
 </html>

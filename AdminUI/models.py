@@ -45,6 +45,20 @@ class FacultyEnrollmentDB(models.Model):
     Contact = models.CharField(max_length=20, null=True, blank=True)
     is_admin = models.BooleanField(default=False, null=True, blank=True)
 
+class JobStatus(models.Model):
+    STATUS_CHOICES = (
+        ('1', 'First interview'),
+        ('2', 'Second interview'),
+        ('3', 'Offer letter'),
+        ('4', 'Rejected'),
+    )
+
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
+
+    # You can add more fields as needed, such as timestamp, user reference, etc.
+
+    def __str__(self):
+        return self.get_status_display()
 
 class JobsDB(models.Model):
     JobId = models.AutoField(primary_key=True)
@@ -55,12 +69,17 @@ class JobsDB(models.Model):
     Description = models.CharField(max_length=1000, null=True, blank=True)
     Email = models.EmailField(max_length=100, null=True, blank=True)
     image_job = models.ImageField(upload_to="job", null=True, blank=True)
+    status = models.ForeignKey(JobStatus, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return self.Title
 
 
 class JobApplications(models.Model):
     JobId = models.ForeignKey(JobsDB, on_delete=models.CASCADE)
     StudentId = models.ForeignKey(StudentDB, on_delete=models.CASCADE)
     Resume = models.FileField(upload_to="Resume")
+
 
 
 class newsDB(models.Model):
