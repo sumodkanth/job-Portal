@@ -1,9 +1,10 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.utils.datastructures import MultiValueDictKeyError
-
-
+from django.views.decorators.cache import never_cache
 
 from AdminUI.models import StudentDB, CourseDB, FacultyEnrollmentDB, DepartmentDB
 from FacultyUI.models import FacultyDB
@@ -12,11 +13,22 @@ import AdminUI.views
 
 
 # Create your views here.
+
 def login_page(request):
     return render(request, "login.html")
 
+
+from django.urls import reverse
+from django.views.decorators.cache import never_cache
+
+@never_cache
 def mainlogin2(request):
-    return render(request, "main-login2.html")
+    if not request.user.is_authenticated:
+        return render(request, "main-login2.html")
+    else:
+        return redirect('AdminUI.views.admin_indexpage')
+
+
 def faculty_login(request):
     if request.method == "POST":
         uid = request.POST.get("userid")
@@ -25,6 +37,7 @@ def faculty_login(request):
             request.session["username"] = uid
             request.session["password"] = mob
             if FacultyEnrollmentDB.objects.get(FacultyID=uid).is_admin == True:
+
                 return redirect(AdminUI.views.admin_indexpage)
             else:
                 return redirect(index_page)
@@ -88,7 +101,6 @@ def profile_edit(request):
         return render(request, "faculty_profile_edit.html", {'f_data': f_data, 'enroll_data': enroll_data})
     else:
         return render(request, "faculty_profile_edit.html", {'enroll_data': enroll_data})
-
 
 
 def profile_save(request):

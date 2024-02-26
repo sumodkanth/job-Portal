@@ -38,13 +38,24 @@ urlpatterns = [
     path('job_applications/<int:job_id>/', views.job_applications, name="job_applications"),
     path('resume_download/<int:job_id>/<int:stud_id>/', views.resume_download, name="resume_download"),
     path('application_single/<int:dataid>/', views.application_single, name="application_single"),
+
     path('add_news/', views.add_news, name="add_news"),
     path('news_save/', views.news_save, name="news_save"),
     path('news_view/', views.news_view, name="news_view"),
+    path('add_news2/', views.add_news2, name="add_news2"),
     path('news_delete/<int:data_id>/', views.news_delete, name="news_delete"),
+
+    path('add_news2/', views.add_news2, name="add_news2"),
+    path('news_save2/', views.news_save2, name="news_save2"),
+    path('news_view2/', views.news_view2, name="news_view2"),
+    path('news_delete2/<int:data_id>/', views.news_delete2, name="news_delete2"),
+
     path('placed/',views.placed,name="placed"),
     path('add_placed/', views.add_placed, name="add_placed"),
     path('display_placed/', views.display_placed,name="display_placed"),
     path('placed_delete/<int:data_id>/', views.placed_delete,name="placed_delete"),
 
+    path('add_marquee/', views.add_marquee, name='add_marquee'),
+    path('marquee_list/', views.marquee_list, name='marquee_list'),
+    path('delete/<int:marquee_id>/', views.delete_marquee, name='delete_marquee'),
 ]

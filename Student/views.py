@@ -5,7 +5,8 @@ from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib.auth.decorators import login_required
-from AdminUI.models import StudentDB, DepartmentDB, CourseDB, JobsDB, JobApplications, newsDB, placed_studdb,JobStatus
+from AdminUI.models import StudentDB, DepartmentDB, CourseDB, JobsDB, JobApplications, newsDB, placed_studdb, JobStatus, \
+    Marquee, newsDB2
 from .forms import SelectionStatusForm
 from django.contrib.auth.decorators import login_required
 import FacultyUI.views
@@ -22,8 +23,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from AdminUI.models import JobApplications
 from django.http import HttpResponse
+from django.views.decorators.cache import never_cache
+
 
 # Create your views here.
+
 def main_login(request):
     return render(request, "main_login.html")
 
@@ -32,17 +36,23 @@ def main_page(request):
     stud_id = request.session.get("username")
     last_post = newsDB.objects.latest('newsId')
     recent_posts = newsDB.objects.order_by('newsId')[0:5]
+    last_post2 = newsDB2.objects.latest('newsId')
+    recent_posts2 = newsDB2.objects.order_by('newsId')[0:5]
     job_data = JobsDB.objects.all()
     placed_posts = placed_studdb.objects.order_by('p_id')[0:30]
+    marquee_texts = Marquee.objects.all()
+
     if stud_id:
         name = StudentDB.objects.get(StudentId=stud_id)
         return render(request, "main_home.html",
-                      {"name": name, "job_data": job_data, "last_post": last_post, "recent_posts": recent_posts,
-                       "placed_posts": placed_posts})
+                      {"name": name, "job_data": job_data, "last_post": last_post, "last_post2": last_post2,
+                       "recent_posts": recent_posts, "recent_posts2": recent_posts2,
+                       "placed_posts": placed_posts, 'marquee_texts': marquee_texts})
     else:
         return render(request, "main_home.html",
-                      {"job_data": job_data, "last_post": last_post, "recent_posts": recent_posts,
-                       "placed_posts": placed_posts})
+                      {"job_data": job_data, "last_post": last_post, "last_post2": last_post2,
+                       "recent_posts": recent_posts, "recent_posts2": recent_posts2,
+                       "placed_posts": placed_posts, 'marquee_texts': marquee_texts})
 
 
 def recruiter(request):
@@ -148,6 +158,11 @@ def stud_notification(request):
     return render(request, 'notification.html', {"obj": obj})
 
 
+def stud_notification2(request):
+    obj = newsDB2.objects.all()
+    return render(request, 'notification2.html', {"obj": obj})
+
+
 def stud_user(request):
     return render(request, 'student_login.html')
 
@@ -209,8 +224,6 @@ def jobs_view_single(request, job_id):
         return render(request, "main_login.html")
 
 
-
-
 def job_apply(request, job_id):
     stud_id = request.session["username"]
     name = StudentDB.objects.get(StudentId=stud_id)
@@ -224,6 +237,11 @@ def job_apply(request, job_id):
 def notification_single(request, news_id):
     news_data = newsDB.objects.get(newsId=news_id)
     return render(request, "notification_single.html", {"news_data": news_data})
+
+
+def notification_single2(request, news_id):
+    news_data = newsDB2.objects.get(newsId=news_id)
+    return render(request, "notification_single2.html", {"news_data": news_data})
 
 
 def help(request):
@@ -339,6 +357,7 @@ def update_password(request):
 
     return render(request, 'entermail1.html')  # Replace 'your_template.html' with the actual template name
 
+
 @login_required
 def selection_status_view(request):
     if request.method == 'POST':
@@ -351,7 +370,6 @@ def selection_status_view(request):
     else:
         form = SelectionStatusForm()
     return render(request, 'job_view_single.html', {'form': form})
-
 
 
 # def status_update(request,job_data):
@@ -372,13 +390,12 @@ def selection_status_view(request):
 #         messages.error(request, 'Please log in to view this page.')
 #         return render(request, "main_login.html")
 def status_update(request, job_update):
-
     job_data2 = JobsDB.objects.get(Company=job_update)
     # Logic to fetch job details based on job_id
     # This is just a placeholder. Replace it with your actual logic.
 
-
     return render(request, "statusupdate.html", {'job_data2': job_data2})
+
 
 # def save_status(request):
 #     if request.method == 'POST':
@@ -395,7 +412,6 @@ def status_update(request, job_update):
 #     return render(request, 'statusupdate.html')  # If not a POST request, render the same template
 
 
-
 def save_status(request):
     if request.method == 'POST':
         job_status = request.POST.get('job_status')
@@ -410,6 +426,8 @@ def save_status(request):
         else:
             messages.error(request, "Invalid input")
     return redirect('jobs_view')  # Redirect to jobs_view URL
+
+
 def users_by_status(request, status):
     # Retrieve users based on the status
     users = JobsDB.objects.filter(status__status=status)

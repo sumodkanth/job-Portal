@@ -31,13 +31,14 @@
     <!-- partial:partials/_sidebar.html -->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-            <h4>CMS-FACULTY</h4>
+            <a href="{% url 'admin_indexpage' %}">
+                <h4 style="color: blue;">CMS-FACULTY</h4></a>
 <!--            <a class="sidebar-brand brand-logo" href="{% url 'faculty_index' %}"><img-->
 <!--                    alt="logo" src="{% static 'assets/images/logo.svg' %}"/></a>-->
-            <a class="sidebar-brand brand-logo-mini" href="{% url 'faculty_index' %}"><img
-                    alt="logo" src="{% static 'assets/images/logo-mini.svg' %}"/></a>
+<!--            <a class="sidebar-brand brand-logo-mini" href="{% url 'faculty_index' %}"><img-->
+<!--                    alt="logo" src="{% static 'assets/images/logo-mini.svg' %}"/></a>-->
         </div>
-        <ul class="nav">
+        <ul class="nav" >
             <li class="nav-item profile">
                 <div class="profile-desc">
                     <div class="profile-pic">
@@ -49,7 +50,7 @@
                             <span class="count bg-success"></span>
                         </div>
                         <div class="profile-name">
-                            <h5 class="mb-0 font-weight-normal">{{enroll_data.Name}}</h5>
+                            <h5 class="mb-0 font-weight-normal" style="color: black;">{{enroll_data.Name}}</h5>
                         </div>
                     </div>
 
@@ -107,120 +108,120 @@
                 <button class="navbar-toggler navbar-toggler align-self-center" data-toggle="minimize" type="button">
                     <span class="mdi mdi-menu"></span>
                 </button>
-                <ul class="navbar-nav w-100">
-                    <li class="nav-item w-100">
-                        <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
-                            <input class="form-control" placeholder="Search students" type="text">
-                        </form>
-                    </li>
-                </ul>
+<!--                <ul class="navbar-nav w-100">-->
+<!--                    <li class="nav-item w-100">-->
+<!--                        <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">-->
+<!--                            <input class="form-control" placeholder="Search students" type="text">-->
+<!--                        </form>-->
+<!--                    </li>-->
+<!--                </ul>-->
                 <ul class="navbar-nav navbar-nav-right">
-                    <li class="nav-item dropdown d-none d-lg-block">
-                        <a aria-expanded="false" class="nav-link btn btn-success create-new-button"
-                           data-toggle="dropdown" href="#" id="createbuttonDropdown">Search</a>
+<!--                    <li class="nav-item dropdown d-none d-lg-block">-->
+<!--                        <a aria-expanded="false" class="nav-link btn btn-success create-new-button"-->
+<!--                           data-toggle="dropdown" href="#" id="createbuttonDropdown">Search</a>-->
 
-                    </li>
+<!--                    </li>-->
                     <li class="nav-item nav-settings d-none d-lg-block">
                         <a class="nav-link" href="#">
                             <i class="mdi mdi-view-grid"></i>
                         </a>
                     </li>
-                    <li class="nav-item dropdown border-left">
-                        <a aria-expanded="false" class="nav-link count-indicator dropdown-toggle" data-toggle="dropdown"
-                           href="#" id="messageDropdown">
-                            <i class="mdi mdi-email"></i>
-                            <span class="count bg-success"></span>
-                        </a>
-                        <div aria-labelledby="messageDropdown"
-                             class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list">
-                            <h6 class="p-3 mb-0">Messages</h6>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item preview-item">
-                                <div class="preview-thumbnail">
-                                    <img alt="image" class="rounded-circle profile-pic"
-                                         src="{% static 'assets/images/faces/face4.jpg' %}">
-                                </div>
-                                <div class="preview-item-content">
-                                    <p class="preview-subject ellipsis mb-1">Mark send you a message</p>
-                                    <p class="text-muted mb-0"> 1 Minutes ago </p>
-                                </div>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item preview-item">
-                                <div class="preview-thumbnail">
-                                    <img alt="image" class="rounded-circle profile-pic"
-                                         src="{% static 'assets/images/faces/face2.jpg' %}">
-                                </div>
-                                <div class="preview-item-content">
-                                    <p class="preview-subject ellipsis mb-1">Cregh send you a message</p>
-                                    <p class="text-muted mb-0"> 15 Minutes ago </p>
-                                </div>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item preview-item">
-                                <div class="preview-thumbnail">
-                                    <img alt="image" class="rounded-circle profile-pic"
-                                         src="{% static 'assets/images/faces/face3.jpg' %}">
-                                </div>
-                                <div class="preview-item-content">
-                                    <p class="preview-subject ellipsis mb-1">Profile picture updated</p>
-                                    <p class="text-muted mb-0"> 18 Minutes ago </p>
-                                </div>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <p class="p-3 mb-0 text-center">4 new messages</p>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown border-left">
-                        <a class="nav-link count-indicator dropdown-toggle" data-toggle="dropdown" href="#"
-                           id="notificationDropdown">
-                            <i class="mdi mdi-bell"></i>
-                            <span class="count bg-danger"></span>
-                        </a>
-                        <div aria-labelledby="notificationDropdown"
-                             class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list">
-                            <h6 class="p-3 mb-0">Notifications</h6>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item preview-item">
-                                <div class="preview-thumbnail">
-                                    <div class="preview-icon bg-dark rounded-circle">
-                                        <i class="mdi mdi-calendar text-success"></i>
-                                    </div>
-                                </div>
-                                <div class="preview-item-content">
-                                    <p class="preview-subject mb-1">Event today</p>
-                                    <p class="text-muted ellipsis mb-0"> Just a reminder that you have an event
-                                        today </p>
-                                </div>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item preview-item">
-                                <div class="preview-thumbnail">
-                                    <div class="preview-icon bg-dark rounded-circle">
-                                        <i class="mdi mdi-settings text-danger"></i>
-                                    </div>
-                                </div>
-                                <div class="preview-item-content">
-                                    <p class="preview-subject mb-1">Settings</p>
-                                    <p class="text-muted ellipsis mb-0"> Update dashboard </p>
-                                </div>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item preview-item">
-                                <div class="preview-thumbnail">
-                                    <div class="preview-icon bg-dark rounded-circle">
-                                        <i class="mdi mdi-link-variant text-warning"></i>
-                                    </div>
-                                </div>
-                                <div class="preview-item-content">
-                                    <p class="preview-subject mb-1">Launch Admin</p>
-                                    <p class="text-muted ellipsis mb-0"> New admin wow! </p>
-                                </div>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <p class="p-3 mb-0 text-center">See all notifications</p>
-                        </div>
-                    </li>
+<!--                    <li class="nav-item dropdown border-left">-->
+<!--                        <a aria-expanded="false" class="nav-link count-indicator dropdown-toggle" data-toggle="dropdown"-->
+<!--                           href="#" id="messageDropdown">-->
+<!--                            <i class="mdi mdi-email"></i>-->
+<!--                            <span class="count bg-success"></span>-->
+<!--                        </a>-->
+<!--                        <div aria-labelledby="messageDropdown"-->
+<!--                             class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list">-->
+<!--                            <h6 class="p-3 mb-0">Messages</h6>-->
+<!--                            <div class="dropdown-divider"></div>-->
+<!--                            <a class="dropdown-item preview-item">-->
+<!--                                <div class="preview-thumbnail">-->
+<!--                                    <img alt="image" class="rounded-circle profile-pic"-->
+<!--                                         src="{% static 'assets/images/faces/face4.jpg' %}">-->
+<!--                                </div>-->
+<!--                                <div class="preview-item-content">-->
+<!--                                    <p class="preview-subject ellipsis mb-1">Mark send you a message</p>-->
+<!--                                    <p class="text-muted mb-0"> 1 Minutes ago </p>-->
+<!--                                </div>-->
+<!--                            </a>-->
+<!--                            <div class="dropdown-divider"></div>-->
+<!--                            <a class="dropdown-item preview-item">-->
+<!--                                <div class="preview-thumbnail">-->
+<!--                                    <img alt="image" class="rounded-circle profile-pic"-->
+<!--                                         src="{% static 'assets/images/faces/face2.jpg' %}">-->
+<!--                                </div>-->
+<!--                                <div class="preview-item-content">-->
+<!--                                    <p class="preview-subject ellipsis mb-1">Cregh send you a message</p>-->
+<!--                                    <p class="text-muted mb-0"> 15 Minutes ago </p>-->
+<!--                                </div>-->
+<!--                            </a>-->
+<!--                            <div class="dropdown-divider"></div>-->
+<!--                            <a class="dropdown-item preview-item">-->
+<!--                                <div class="preview-thumbnail">-->
+<!--                                    <img alt="image" class="rounded-circle profile-pic"-->
+<!--                                         src="{% static 'assets/images/faces/face3.jpg' %}">-->
+<!--                                </div>-->
+<!--                                <div class="preview-item-content">-->
+<!--                                    <p class="preview-subject ellipsis mb-1">Profile picture updated</p>-->
+<!--                                    <p class="text-muted mb-0"> 18 Minutes ago </p>-->
+<!--                                </div>-->
+<!--                            </a>-->
+<!--                            <div class="dropdown-divider"></div>-->
+<!--                            <p class="p-3 mb-0 text-center">4 new messages</p>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item dropdown border-left">-->
+<!--                        <a class="nav-link count-indicator dropdown-toggle" data-toggle="dropdown" href="#"-->
+<!--                           id="notificationDropdown">-->
+<!--                            <i class="mdi mdi-bell"></i>-->
+<!--                            <span class="count bg-danger"></span>-->
+<!--                        </a>-->
+<!--                        <div aria-labelledby="notificationDropdown"-->
+<!--                             class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list">-->
+<!--                            <h6 class="p-3 mb-0">Notifications</h6>-->
+<!--                            <div class="dropdown-divider"></div>-->
+<!--                            <a class="dropdown-item preview-item">-->
+<!--                                <div class="preview-thumbnail">-->
+<!--                                    <div class="preview-icon bg-dark rounded-circle">-->
+<!--                                        <i class="mdi mdi-calendar text-success"></i>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="preview-item-content">-->
+<!--                                    <p class="preview-subject mb-1">Event today</p>-->
+<!--                                    <p class="text-muted ellipsis mb-0"> Just a reminder that you have an event-->
+<!--                                        today </p>-->
+<!--                                </div>-->
+<!--                            </a>-->
+<!--                            <div class="dropdown-divider"></div>-->
+<!--                            <a class="dropdown-item preview-item">-->
+<!--                                <div class="preview-thumbnail">-->
+<!--                                    <div class="preview-icon bg-dark rounded-circle">-->
+<!--                                        <i class="mdi mdi-settings text-danger"></i>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="preview-item-content">-->
+<!--                                    <p class="preview-subject mb-1">Settings</p>-->
+<!--                                    <p class="text-muted ellipsis mb-0"> Update dashboard </p>-->
+<!--                                </div>-->
+<!--                            </a>-->
+<!--                            <div class="dropdown-divider"></div>-->
+<!--                            <a class="dropdown-item preview-item">-->
+<!--                                <div class="preview-thumbnail">-->
+<!--                                    <div class="preview-icon bg-dark rounded-circle">-->
+<!--                                        <i class="mdi mdi-link-variant text-warning"></i>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="preview-item-content">-->
+<!--                                    <p class="preview-subject mb-1">Launch Admin</p>-->
+<!--                                    <p class="text-muted ellipsis mb-0"> New admin wow! </p>-->
+<!--                                </div>-->
+<!--                            </a>-->
+<!--                            <div class="dropdown-divider"></div>-->
+<!--                            <p class="p-3 mb-0 text-center">See all notifications</p>-->
+<!--                        </div>-->
+<!--                    </li>-->
                     <li class="nav-item dropdown">
                         <a class="nav-link" data-toggle="dropdown" href="#" id="profileDropdown">
                             <div class="navbar-profile">

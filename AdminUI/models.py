@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+
 # Create your models here.
 
 
@@ -45,6 +46,7 @@ class FacultyEnrollmentDB(models.Model):
     Contact = models.CharField(max_length=20, null=True, blank=True)
     is_admin = models.BooleanField(default=False, null=True, blank=True)
 
+
 class JobStatus(models.Model):
     STATUS_CHOICES = (
         ('1', 'First interview'),
@@ -59,6 +61,7 @@ class JobStatus(models.Model):
 
     def __str__(self):
         return self.get_status_display()
+
 
 class JobsDB(models.Model):
     JobId = models.AutoField(primary_key=True)
@@ -81,8 +84,16 @@ class JobApplications(models.Model):
     Resume = models.FileField(upload_to="Resume")
 
 
-
 class newsDB(models.Model):
+    newsId = models.AutoField(primary_key=True)
+    news_Title = models.CharField(max_length=100, null=True, blank=True)
+    news_Location = models.CharField(max_length=100, null=True, blank=True)
+    news_date = models.DateField(null=True, blank=True)
+    Description = models.CharField(max_length=1000, null=True, blank=True)
+    news_image = models.ImageField(upload_to="job", null=True, blank=True)
+
+
+class newsDB2(models.Model):
     newsId = models.AutoField(primary_key=True)
     news_Title = models.CharField(max_length=100, null=True, blank=True)
     news_Location = models.CharField(max_length=100, null=True, blank=True)
@@ -99,3 +110,8 @@ class placed_studdb(models.Model):
     p_dis = models.CharField(max_length=50, null=True, blank=True)
     p_img = models.ImageField(upload_to="placement", null=True, blank=True)
 
+
+class Marquee(models.Model):
+    text = models.CharField(max_length=200)
+    date = models.DateField()
+    time = models.TimeField()

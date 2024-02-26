@@ -9,8 +9,9 @@ from django.shortcuts import render, redirect
 from django.utils.datastructures import MultiValueDictKeyError
 
 from AdminUI.models import DepartmentDB, CourseDB, StudentDB, FacultyEnrollmentDB, JobsDB, JobApplications, newsDB, \
-    placed_studdb
+    placed_studdb, Marquee, newsDB2
 from FacultyUI.models import FacultyDB
+from .forms import MarqueeForm
 
 
 # Create your views here.
@@ -359,6 +360,10 @@ def add_news(request):
     return render(request, "add_news.html")
 
 
+def add_news2(request):
+    return render(request, "addnews2.html")
+
+
 def news_save(request):
     if request.method == "POST":
         title = request.POST.get("news_Title")
@@ -371,7 +376,22 @@ def news_save(request):
         obj = newsDB(news_Title=title, news_Location=company, news_date=formatted_endate,
                      Description=description, news_image=im)
         obj.save()
-        return redirect(add_news)
+        return redirect(add_news2)
+
+
+def news_save2(request):
+    if request.method == "POST":
+        title = request.POST.get("news_Title")
+        company = request.POST.get("news_Location")
+        location = request.POST.get("news_date")
+        date_obj = datetime.strptime(location, "%d-%m-%Y")
+        formatted_endate = date_obj.strftime("%Y-%m-%d")
+        description = request.POST.get("Description")
+        im = request.FILES['image']
+        obj = newsDB2(news_Title=title, news_Location=company, news_date=formatted_endate,
+                      Description=description, news_image=im)
+        obj.save()
+        return redirect(add_news2)
 
 
 def news_view(request):
@@ -379,10 +399,21 @@ def news_view(request):
     return render(request, "news_view.html", {"obj": obj})
 
 
+def news_view2(request):
+    obj = newsDB2.objects.all()
+    return render(request, "viewnews2.html", {"obj": obj})
+
+
 def news_delete(request, data_id):
     job_data = newsDB.objects.filter(newsId=data_id)
     job_data.delete()
     return redirect(news_view)
+
+
+def news_delete2(request, data_id):
+    job_data = newsDB2.objects.filter(newsId=data_id)
+    job_data.delete()
+    return redirect(news_view2)
 
 
 def placed(request):
@@ -410,3 +441,26 @@ def placed_delete(request, data_id):
     placed_data = placed_studdb.objects.filter(p_id=data_id)
     placed_data.delete()
     return redirect(display_placed)
+
+
+def add_marquee(request):
+    if request.method == 'POST':
+        form = MarqueeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('marquee_list')  # Redirect to view page after saving
+    else:
+        form = MarqueeForm()
+    return render(request, 'AddAlerts.html', {'form': form})
+
+
+def marquee_list(request):
+    marquee_list = Marquee.objects.all()
+    return render(request, 'ViewAlerts.html', {'marquee_list': marquee_list})
+
+
+def delete_marquee(request, marquee_id):
+    if request.method == 'POST':
+        marquee = Marquee.objects.get(pk=marquee_id)
+        marquee.delete()
+    return redirect('marquee_list')

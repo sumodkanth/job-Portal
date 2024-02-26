@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% extends 'faculty_index.html' %}
+{% extends 'adminindex.html' %}
 {% load static %}
 <html lang="en">
 <head>
@@ -10,7 +10,7 @@
 {% block content %}
 <div class="row ">
     <div class="col-12 grid-margin">
-        <div class="card">
+        <div class="card" style="background-color: gray;">
             <div class="card-body">
                 <h2 class="card-title">Edit Profile</h2>
                 <div class="dropdown-divider"></div>
@@ -43,7 +43,7 @@
                         </div>
                         <div class="mtop3 col-lg-6">
                             <input class="form-control" name="name" placeholder="Name" type="text"
-                                   value="{{enroll_data.Name}}">
+                                   value="{{enroll_data.Name}}" style="background-color: gray; border: 1px solid black; color: white;">
                         </div>
                     </div>
 
@@ -86,7 +86,7 @@
                         {% else %}
                         <div class="mtop3 col-lg-6">
                             <input class="form-control" id="birthdate" min="" name="dob" type="date"
-                                   value="{{f_data.DoB}}">
+                                   value="{{f_data.DoB}}" style="background-color: gray; border: 1px solid black; color: white;">
                         </div>
                         {% endif %}
                     </div>
@@ -97,7 +97,7 @@
                         </div>
                         <div class="mtop3 col-lg-6">
                             <input class="form-control" name="contact"
-                                   type="tel" value="{{enroll_data.Contact}}">
+                                   type="tel" value="{{enroll_data.Contact}}" style="background-color: gray; border: 1px solid black; color: white;">
                         </div>
                     </div>
 
@@ -107,7 +107,7 @@
                         </div>
                         <div class="mtop3 col-lg-6">
                             <input class="form-control" name="altcontact" type="tel"
-                                   value="{{f_data.AltContact}}">
+                                   value="{{f_data.AltContact}}" style="background-color: gray; border: 1px solid black; color: white;">
                         </div>
                     </div>
 
@@ -116,7 +116,7 @@
                             <label>Communication Address</label>
                         </div>
                         <div class="mtop3 col-lg-6">
-                            <textarea class="form-control" name="address">{{f_data.Address}}</textarea>
+                            <textarea class="form-control" name="address" style="background-color: gray; border: 1px solid black; color: white;">{{f_data.Address}}</textarea>
                         </div>
                     </div>
 
@@ -126,7 +126,7 @@
                         </div>
                         <div class="mtop3 col-lg-6">
                             <input class="form-control" name="email" placeholder="domain@example.com" type="email"
-                                   value="{{f_data.Email}}">
+                                   value="{{f_data.Email}}" style="background-color: gray; border: 1px solid black; color: white;">
                         </div>
                     </div>
 
@@ -138,7 +138,7 @@
                             <label>Bank Name</label>
                         </div>
                         <div class="mtop3 col-lg-6">
-                            <input class="form-control" name="bank" type="text" value="{{f_data.Bank}}">
+                            <input class="form-control" name="bank" type="text" value="{{f_data.Bank}}" style="background-color: gray; border: 1px solid black; color: white;">
                         </div>
                     </div>
 
@@ -147,7 +147,7 @@
                             <label>Account Number</label>
                         </div>
                         <div class="mtop3 col-lg-6">
-                            <input class="form-control" name="accnum" type="text" value="{{f_data.Acc_Number}}">
+                            <input class="form-control" name="accnum" type="text" value="{{f_data.Acc_Number}}" style="background-color: gray; border: 1px solid black; color: white;">
                         </div>
                     </div>
 
@@ -156,7 +156,7 @@
                             <label>IFSC</label>
                         </div>
                         <div class="mtop3 col-lg-6">
-                            <input class="form-control" name="ifsc" type="text" value="{{f_data.IFSC}}">
+                            <input class="form-control" name="ifsc" type="text" value="{{f_data.IFSC}}" style="background-color: gray; border: 1px solid black; color: white;">
                         </div>
                     </div>
 

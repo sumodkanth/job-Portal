@@ -33,7 +33,7 @@
     <div class="container-scroller">
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
-        <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+        <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top" style="background-color: #bec7d4;">
            <a href="{% url 'main_page' %}">   
           <h4>CMS-STUDENT</h4>
 <!--          <a class="sidebar-brand brand-logo" href="index.html"><img src="{% static 'assets/images/logo.svg' %}" alt="logo" /></a>-->
@@ -49,7 +49,7 @@
                   <span class="count bg-success"></span>
                 </div>
                 <div class="profile-name">
-                  <h5 class="mb-0 font-weight-normal" style="color:#000000;">{{name.FirstName}}</h5>
+                  <h5 class="mb-0 font-weight-normal" style="color: black;">{{name.FirstName}}</h5>
                   <span>Gold Member</span>
                 </div>
               </div>
@@ -146,7 +146,7 @@
       <!-- partial -->
       <div class="container-fluid page-body-wrapper">
         <!-- partial:partials/_navbar.html -->
-        <nav class="navbar p-0 fixed-top d-flex flex-row">
+        <nav class="navbar p-0 fixed-top d-flex flex-row" style="background-color: #bec7d4;">
           <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
             <a class="navbar-brand brand-logo-mini" href="index.html"><img src="{% static 'assets/images/logo-mini.svg' %}" alt="logo" /></a>
           </div>
@@ -167,7 +167,7 @@
                 <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                   <div class="navbar-profile">
                     <img class="img-xs rounded-circle" src="{{name.Image.url}}" alt="">
-                    <p class="mb-0 d-none d-sm-block navbar-profile-name" style="color:#000000;">{{name.FirstName}}</p>
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name" style="color: black;">{{name.FirstName}}</p>
                     <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                   </div>
                 </a>
@@ -221,8 +221,10 @@
           </footer>
           <!-- partial -->
         </div>
+
         <!-- main-panel ends -->
       </div>
+
       <!-- page-body-wrapper ends -->
     </div>
     <!-- container-scroller -->

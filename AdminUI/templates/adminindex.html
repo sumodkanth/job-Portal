@@ -28,13 +28,13 @@
     <div class="container-scroller">
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
-        <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-          <a href="{% url 'main_page' %}">
-          <h4 style="color: blue;">CMS-ADMIN</h4>
+        <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top" style="background-color: #bec7d4;">
+          <a href="{% url 'admin_indexpage' %}">
+          <h4 style="color: blue;">CMS-ADMIN</h4></a>
 <!--          <a class="sidebar-brand brand-logo" href="index.html"><img src="{% static 'assets/images/logo.svg' %}" alt="logo" /></a>-->
           <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="{% static 'assets/images/logo-mini.svg' %}" alt="logo" /></a>
         </div>
-        <ul class="nav">
+        <ul class="nav" >
           <li class="nav-item profile">
             <div class="profile-desc">
               <div class="profile-pic">
@@ -89,7 +89,7 @@
             <span class="nav-link">Navigation</span>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="{% url 'admin_indexpage' %}">
+            <a class="nav-link" href="{% url 'faculty_profile' %}">
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
               </span>
@@ -173,6 +173,7 @@
               </ul>
             </div>
           </li>
+
           <li class="nav-item menu-items">
             <a class="nav-link" data-toggle="collapse" href="#ui-jobportal3" aria-expanded="false" aria-controls="ui-basic">
               <span class="menu-icon">
@@ -181,28 +182,61 @@
               <span class="menu-title">Training</span>
               <i class="menu-arrow"></i>
             </a>
-          <div class="collapse" id="ui-jobportal3">
-            <ul class="nav flex-column sub-menu">
-              <li class="nav-item"> <a class="nav-link" href="{% url 'add_news' %}">Add Training</a></li>
-              <li class="nav-item"> <a class="nav-link" href="{% url 'news_view' %}">View Training</a></li>
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item menu-items">
-          <a class="nav-link" data-toggle="collapse" href="#ui-jobportal1" aria-expanded="false" aria-controls="ui-basic">
-            <span class="menu-icon">
-              <i class="mdi mdi-briefcase"></i>
-            </span>
-            <span class="menu-title">Placement</span>
-            <i class="menu-arrow"></i>
-          </a>
-        <div class="collapse" id="ui-jobportal1">
-          <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="{% url 'placed' %}">Add Placement</a></li>
-            <li class="nav-item"> <a class="nav-link" href="{% url 'display_placed' %}">View Placement</a></li>
-          </ul>
-        </div>
-      </li>
+            <div class="collapse" id="ui-jobportal3">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="{% url 'add_news' %}">Add Training</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'news_view' %}">View Training</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="nav-item menu-items">
+            <a class="nav-link" data-toggle="collapse" href="#ui-jobportal1" aria-expanded="false" aria-controls="ui-basic">
+              <span class="menu-icon">
+                <i class="mdi mdi-briefcase"></i>
+              </span>
+              <span class="menu-title">Placement</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-jobportal1">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="{% url 'placed' %}">Add Placement</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'display_placed' %}">View Placement</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="nav-item menu-items">
+            <a class="nav-link" data-toggle="collapse" href="#ui-jobportal4" aria-expanded="false" aria-controls="ui-basic">
+              <span class="menu-icon">
+                <i class="mdi mdi-briefcase"></i>
+              </span>
+              <span class="menu-title">Alerts</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-jobportal4">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="{% url 'add_marquee' %}">Add Alerts</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'marquee_list' %}">View Alerts</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="nav-item menu-items">
+            <a class="nav-link" data-toggle="collapse" href="#ui-jobportal5" aria-expanded="false" aria-controls="ui-basic">
+              <span class="menu-icon">
+                <i class="mdi mdi-briefcase"></i>
+              </span>
+              <span class="menu-title">News</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-jobportal5">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="{% url 'add_news2' %}">Add News</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'news_view2' %}">View News</a></li>
+              </ul>
+            </div>
+          </li>
 
           {% else %}
           <li class="nav-item menu-items">
@@ -220,7 +254,7 @@
       <!-- partial -->
       <div class="container-fluid page-body-wrapper">
         <!-- partial:partials/_navbar.html -->
-        <nav class="navbar p-0 fixed-top d-flex flex-row">
+        <nav class="navbar p-0 fixed-top d-flex flex-row" style="background-color: #bec7d4;">
           <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
             <a class="navbar-brand brand-logo-mini" href="index.html"><img src="{% static 'assets/images/logo-mini.svg' %}" alt="logo" /></a>
           </div>
@@ -282,9 +316,18 @@
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
+
             {% block content %}
 
+
+ <div class="col-lg-8">
+    <p class="lead" style="color: black;">A job portal on a college website is a valuable resource for students and alumni in their job search and career development. It aims to bridge the gap between education and the professional world by providing access to job opportunities and career-related support.</p>
+>
+</div>
+
+
             {% endblock %}
+
           </div>
           <!-- content-wrapper ends -->
           <!-- partial:partials/_footer.html -->
