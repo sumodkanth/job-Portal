@@ -16,7 +16,9 @@ urlpatterns = [
     path('update_course/<int:dataid>/', views.update_course, name="update_course"),
     path('delete_course/<int:dataid>/', views.delete_course, name="delete_course"),
     path('add_student/', views.add_student, name="add_student"),
+    path('add_student2/', views.add_student2, name="add_student2"),
     path('submit_student/', views.submit_student, name="submit_student"),
+    path('submit_student2/', views.submit_student_from_excel, name="submit_student2"),
     path('view_students/', views.view_students, name="view_students"),
     path('search_students/', views.search_students, name="search_students"),
     path('view_single_student/<int:dataid>/', views.view_single_student, name="view_single_student"),
@@ -29,11 +31,13 @@ urlpatterns = [
     path('view_single_faculty/<int:dataid>/', views.view_single_faculty, name="view_single_faculty"),
     path('admin_login/', views.admin_login, name="admin_login"),
     path('admin_signin/', views.admin_signin, name="admin_signin"),
+
     path('add_job/', views.add_job, name="add_job"),
     path('job_save/', views.job_save, name="job_save"),
     path('view_jobs/', views.view_jobs, name="view_jobs"),
     path('job_delete/<int:data_id>/', views.job_delete, name="job_delete"),
     path('view_job_single/<int:data_id>/', views.view_job_single, name="view_job_single"),
+
     path('update_job/<int:job_id>/', views.update_job, name="update_job"),
     path('job_applications/<int:job_id>/', views.job_applications, name="job_applications"),
     path('resume_download/<int:job_id>/<int:stud_id>/', views.resume_download, name="resume_download"),
@@ -58,4 +62,8 @@ urlpatterns = [
     path('add_marquee/', views.add_marquee, name='add_marquee'),
     path('marquee_list/', views.marquee_list, name='marquee_list'),
     path('delete/<int:marquee_id>/', views.delete_marquee, name='delete_marquee'),
+    path('job_details/', views.job_details, name='job_details'),
 ]
+
+
+# path('job_details/<str:data>/', views.job_details, name='job_details'),

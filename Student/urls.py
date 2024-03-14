@@ -29,6 +29,8 @@ urlpatterns = [
     path('jobs_view_single/<int:job_id>/', views.jobs_view_single, name="jobs_view_single"),
     path('job_apply/<int:job_id>/', views.job_apply, name="job_apply"),
     path('main_login/', views.main_login, name="main_login"),
+
+
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password_resetdone/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
@@ -40,6 +42,7 @@ urlpatterns = [
     path('newpass/',views.newpass,name='newpass'),
     path('update_password/',views.update_password,name='update_password'),
     path('selection-status/', selection_status_view, name='selection_status_view'),
-    path('status_update/<str:job_update>/', views.status_update, name='status_update_page'),
+    path('status_update/<str:job_update>/<str:applied_student_id>/', views.status_update, name='status_update_page'),
+
     path('save-status/', views.save_status, name='save_status'),
 ]

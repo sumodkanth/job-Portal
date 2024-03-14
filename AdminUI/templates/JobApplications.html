@@ -20,6 +20,7 @@
                             <th> Student Name</th>
                             <th> Course</th>
                             <th> Resume </th>
+                            <th> Status </th>
                             <th> More </th>
                           </tr>
                         </thead>
@@ -31,6 +32,7 @@
                             <td> {{i.StudentId.FirstName}} {{i.StudentId.LastName}}</td>
                             <td> {{i.StudentId.CourseId.CourseName}}</td>
                             <td><a href="{% url 'resume_download' job_id=i.JobId.JobId stud_id=i.StudentId.StudentId  %}">Download Resume</a></td>
+                              <td>{{job_statuses.status_text}}</td>
                             <td>
                                 <a href="{% url 'application_single' dataid=i.StudentId.StudentId %}">More details...</i></a>&nbsp;&nbsp;
                             </td>

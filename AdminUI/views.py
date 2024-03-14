@@ -9,10 +9,10 @@ from django.shortcuts import render, redirect
 from django.utils.datastructures import MultiValueDictKeyError
 
 from AdminUI.models import DepartmentDB, CourseDB, StudentDB, FacultyEnrollmentDB, JobsDB, JobApplications, newsDB, \
-    placed_studdb, Marquee, newsDB2
+    placed_studdb, Marquee, newsDB2, InterviewStep, JobStatus2
 from FacultyUI.models import FacultyDB
 from .forms import MarqueeForm
-
+import pandas as pd
 
 # Create your views here.
 
@@ -110,7 +110,9 @@ def add_student(request):
     data = CourseDB.objects.all()
     return render(request, "AddStudent.html", {"data": data})
 
+def add_student2(request):
 
+    return render(request, "AddStudentsExcel.html")
 def submit_student(request):
     if request.method == "POST":
         fname = request.POST.get("fname")
@@ -133,6 +135,44 @@ def submit_student(request):
                         GuardianName=gname, GuardianContact=gcontact, Image=im, password=contact)
         obj.save()
         return redirect(add_student)
+
+def submit_student_from_excel(request):
+    if request.method == 'POST' and request.FILES['excel_file']:
+        excel_file = request.FILES['excel_file']
+        if excel_file.name.endswith('.xlsx'):
+            try:
+                # Read Excel file into a pandas DataFrame
+                df = pd.read_excel(excel_file)
+
+                # Iterate over rows and create StudentDB objects
+                for index, row in df.iterrows():
+                    student = StudentDB(
+                        FirstName=row['First Name'],
+                        LastName=row['Last Name'],
+                        EnrollmentID=row['Enrollment ID'],
+                        EnrollDate=row['Enrollment Date'],
+                        CourseId=row['Course'],
+                        DateOfBirth=row['Date of Birth'],
+                        Gender=row['Gender'],
+                        Email=row['Email'],
+                        ContactNo=row['Contact Number'],
+                        Address=row['Address'],
+                        GuardianName=row['Guardian Name'],
+                        GuardianContact=row['Guardian Contact Number'],
+                        # Assuming 'Image' field is handled separately
+                    )
+                    student.save()
+
+                return redirect('view_students')  # Redirect to a success page or the form page
+            except Exception as e:
+                # Handle exceptions (e.g., invalid file format, missing columns, etc.)
+                return render(request, 'error.html', {'error': str(e)})
+        else:
+            # Handle invalid file format
+            return render(request, 'error.html', {'error': 'Invalid file format. Please upload an Excel file !'})
+    else:
+        # Handle GET requests or requests without a file
+        return render(request, 'AddStudentsExcel.html')
 
 
 def view_students(request):
@@ -291,6 +331,20 @@ def add_job(request):
     return render(request, "AddJobOpenings.html")
 
 
+# def job_save(request):
+#     if request.method == "POST":
+#         title = request.POST.get("title")
+#         company = request.POST.get("cname")
+#         location = request.POST.get("location")
+#         qualification = request.POST.get("qualification")
+#         description = request.POST.get("description")
+#         email = request.POST.get("email")
+#         im = request.FILES['image']
+#         obj = JobsDB(Title=title, Company=company, Location=location, Qualification=qualification,
+#                      Description=description, Email=email, image_job=im)
+#         obj.save()
+#         return redirect(add_job)
+
 def job_save(request):
     if request.method == "POST":
         title = request.POST.get("title")
@@ -300,9 +354,20 @@ def job_save(request):
         description = request.POST.get("description")
         email = request.POST.get("email")
         im = request.FILES['image']
+
+        # Extracting interview steps from the form
+        interview_steps = request.POST.getlist('interview_step[]')
+
+        # Creating a job object and saving it to the database
         obj = JobsDB(Title=title, Company=company, Location=location, Qualification=qualification,
                      Description=description, Email=email, image_job=im)
         obj.save()
+
+        # Saving interview steps associated with the job
+        for step_text in interview_steps:
+            step = InterviewStep(job=obj, step_text=step_text)
+            step.save()
+
         return redirect(add_job)
 
 
@@ -315,6 +380,14 @@ def job_delete(request, data_id):
     job_data = JobsDB.objects.filter(JobId=data_id)
     job_data.delete()
     return redirect(view_jobs)
+
+
+# def view_job_single(request, data_id):
+#     if 'username' in request.session:
+#         stud_id = request.session["username"]
+#         student = StudentDB.objects.get(StudentId=stud_id)
+#     job_data = JobsDB.objects.get(JobId=data_id)
+#     return render(request, "ViewJobSingle.html", {'job_data': job_data, 'student': student})
 
 
 def view_job_single(request, data_id):
@@ -338,8 +411,9 @@ def update_job(request, job_id):
 
 def job_applications(request, job_id):
     job_data = JobsDB.objects.get(JobId=job_id)
+    # job_statuses = JobStatus2.get(job=job_id)
     applications = JobApplications.objects.filter(JobId=job_data)
-    return render(request, "JobApplications.html", {'applications': applications})
+    return render(request, "JobApplications.html", {'applications': applications,'job_statuses':job_statuses})
 
 
 def resume_download(request, stud_id, job_id):
@@ -464,3 +538,19 @@ def delete_marquee(request, marquee_id):
         marquee = Marquee.objects.get(pk=marquee_id)
         marquee.delete()
     return redirect('marquee_list')
+
+
+# def job_details(request, data):
+#     # Retrieve the job status object based on the job_status_id
+#
+#     job_status1 = JobStatus2.objects.get(job=data.Company)
+#     # Pass job status to the template for rendering
+#     return render(request, 'job_status_detail.html', {'job_status': job_status1})
+
+
+def job_details(request):
+    # Retrieve the job status object based on the job_status_id
+
+    job_statuses = JobStatus2.objects.all()
+    # Pass job status to the template for rendering
+    return render(request, 'job_status_detail.html', {'job_status': job_statuses})

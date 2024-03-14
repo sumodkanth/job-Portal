@@ -23,10 +23,10 @@ from django.views.decorators.cache import never_cache
 
 @never_cache
 def mainlogin2(request):
-    if not request.user.is_authenticated:
+
         return render(request, "main-login2.html")
-    else:
-        return redirect('AdminUI.views.admin_indexpage')
+    # else:
+    #     return render(request,'faculty_index.html')
 
 
 def faculty_login(request):

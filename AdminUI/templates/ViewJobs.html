@@ -36,15 +36,21 @@
                             <td> {{i.Location}}</td>
                             <td> {{i.Email}}</td>
                             <td>
-                                <a href="{% url 'view_job_single' data_id=i.JobId %}">More details...</i></a>&nbsp;&nbsp;
+                                <a href="{% url 'view_job_single' data_id=i.JobId  %}">More details...</i></a>&nbsp;&nbsp;
+
                             </td>
                           </tr>
                           {% endfor %}
 
                         </tbody>
                       </table>
+                    </div><br>
+                    <div>
+                    <!-- Add a button for status update -->
+                        <a href="{% url 'job_details'  %}">
+                            <button class="btn btn-danger mr-2 btn-rounded">View Status details</button>
+                        </a>
                     </div>
-
                   </div>
                 </div>
 </body>

@@ -1,0 +1,24 @@
+{% extends 'adminindex.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card" style="background-color: gray;color: black;">
+                <div class="card-header" style="text-color:black;">Upload Excel File To add the student details</div>
+
+                <div class="card-body">
+                    <form method="post" action="{% url 'submit_student2'%}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="excelFile">Choose Excel File:</label>
+                            <input type="file" class="form-control-file" id="excelFile" name="excel_file">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

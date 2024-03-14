@@ -6,25 +6,38 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert 2 -->
     <style>
-       .image-container {
+        body {
+            font-family: Arial, sans-serif; /* Set the desired font family */
+        }
+
+        .image-container {
             display: flex;
-            align-items: center;
+            align-items: right;
             padding-left: 300px; /* Adjust the padding as needed */
         }
+
         .image-container img {
             margin-left: auto;
         }
+
     </style>
 </head>
 <body>
 {% block content %}
 <div class="col-12 grid-margin stretch-card">
     <div class="card" style="background-color: gray;">
-        <div class="card-body">
+        <div class="card-body" style="color: black;">
             <h4 class="card-title" style="color: black;">Update job status</h4>
 
-            <!-- Display user details -->
+<!--             Display user details-->
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"><h5>Name :</h5></label>
+                <div class="col-sm-9">
+                    <h5 class="col-form-label">{{studname.FirstName}} {{studname.LastName}}</h5>
+                </div>
+            </div>
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label"><h5>Title :</h5></label>
                 <div class="col-sm-9">
@@ -42,17 +55,22 @@
             </div><br>
 
 
-            <!-- Form to update job status -->
+             <!-- Display job interview steps as checkboxes -->
             <form method="post" action="{% url 'save_status' %}">
                 {% csrf_token %}
-                <label for="exampleFormControlSelect1" class="form-label">Update the current job interview status here</label>
-                <select class="form-select" id="exampleFormControlSelect1" name="job_status">
-                    <option selected>Open this select menu</option>
-                    <option value="1">First interview</option>
-                    <option value="2">Second interview</option>
-                    <option value="3">Offer letter</option>
-                    <option value="4">Rejected</option>
-                </select>
+                <!-- Hidden input field to store job title -->
+                <input type="hidden" name="job_title" value="{{ job_data2.Title }}">
+                <input type="hidden" name="Company" value="{{ job_data2.Company }}">
+                <input type="hidden" name="FirstName" value="{{studname.FirstName}}">
+                <label for="exampleFormControlSelect1" class="form-label">Update the current job interview status here:</label><br>
+                {% for step in job_steps %}
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" value="{{ step.id }}" id="step{{ step.id }}" name="job_steps">
+                    <label class="form-check-label" for="step{{ step.id }}" style="color: blue;">
+                        {{ step.step_text }}
+                    </label>
+                </div>
+                {% endfor %}
                 <button type="submit" class="btn btn-primary mt-3">Submit</button>
             </form>
         </div>
@@ -60,5 +78,29 @@
 </div>
 {% endblock %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('update-status-form');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Use SweetAlert to display a confirmation dialog
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You are about to update the job status.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, update it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form if the user confirms
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

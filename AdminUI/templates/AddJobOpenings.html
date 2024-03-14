@@ -40,10 +40,38 @@
             <label for="exampleInputName1">Image</label>
             <input class="form-control" name="image" type="file" style="background-color: gray; border: 1px solid black; color: white;">
         </div>
+       <!-- Dynamic input field for interview steps -->
+        <div id="interview-steps-container">
+            <div class="form-group interview-step">
+                <label for="exampleInputName1">Interview Step 1</label>
+                <input class="form-control" name="interview_step[]" type="text" style="background-color: gray; border: 1px solid black; color: white;">
+            </div>
+        </div>
+        <button type="button" class="btn btn-secondary" id="add-interview-step">Add Interview Step</button>
+
 
         <button class="btn btn-primary mr-2" type="submit">Submit</button>
     </form>
 </div>
+<script>
+    document.getElementById('add-interview-step').addEventListener('click', function() {
+        var container = document.getElementById('interview-steps-container');
+        var div = document.createElement('div');
+        div.classList.add('form-group', 'interview-step');
+        var label = document.createElement('label');
+        label.textContent = 'Interview Step ' + (container.childElementCount + 1);
+        var input = document.createElement('input');
+        input.classList.add('form-control');
+        input.setAttribute('name', 'interview_step[]');
+        input.setAttribute('type', 'text');
+        input.style.backgroundColor = 'gray';
+        input.style.border = '1px solid black';
+        input.style.color = 'white';
+        div.appendChild(label);
+        div.appendChild(input);
+        container.appendChild(div);
+    });
+</script>
 </body>
 </html>
 {% endblock %}

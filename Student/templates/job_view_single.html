@@ -110,7 +110,7 @@
 </div>
                     <div>
                     <!-- Add a button for status update -->
-                        <a href="{% url 'status_update_page' job_update=job_data.Company %}">
+                        <a href="{% url 'status_update_page' job_update=job_data.Company applied_student_id=student.FirstName %}">
                             <button class="btn btn-danger mr-2 btn-rounded">Update Status</button>
                         </a>
                     </div>

@@ -43,7 +43,7 @@
                   <span class="count bg-success"></span>
                 </div>
                 <div class="profile-name">
-                  <h5 class="mb-0 font-weight-normal" style="color: black;">Henry Klein</h5>
+                  <h5 class="mb-0 font-weight-normal" style="color: black;">Ryban</h5>
                   <span>Gold Member</span>
                 </div>
               </div>
@@ -107,6 +107,7 @@
             <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="{% url 'add_student' %}">Add Students</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'add_student2' %}">Add Students using Excel</a></li>
                 <li class="nav-item"> <a class="nav-link" href="{% url 'view_students' %}">View Students</a></li>
               </ul>
             </div>
@@ -273,11 +274,14 @@
 
               <li class="nav-item dropdown">
                 <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+              {% if request.session.username %}
                   <div class="navbar-profile">
                     <img class="img-xs rounded-circle" src="{% static 'assets/images/faces/face15.jpg' %}" alt="">
-                    <p class="mb-0 d-none d-sm-block navbar-profile-name"  style="color:#000000;">Henry Klein</p>
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name"  style="color:#000000;">{{name.FirstName}}</p>
                     <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                   </div>
+
+              {% endif %}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
                   <h6 class="p-3 mb-0">Profile</h6>
