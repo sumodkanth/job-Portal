@@ -18,7 +18,7 @@ urlpatterns = [
     path('stud_save/',views.stud_save,name="stud_save"),
     path('stud_notification/',views.stud_notification,name="stud_notification"),
     path('stud_notification2/', views.stud_notification2, name="stud_notification2"),
-    path('notification_single/<int:news_id>',views.notification_single,name="notification_single"),
+    path('notification_single/<int:news_ids>',views.notification_single,name="notification_single"),
     path('notification_single2/<int:news_id>', views.notification_single2, name="notification_single2"),
 
     path('stud_user/',views.stud_user,name="stud_user"),
@@ -45,4 +45,5 @@ urlpatterns = [
     path('status_update/<str:job_update>/<str:applied_student_id>/', views.status_update, name='status_update_page'),
 
     path('save-status/', views.save_status, name='save_status'),
+    path('applytraining/<int:trainID>/', views.applytraining, name='applytraining'),
 ]

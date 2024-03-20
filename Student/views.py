@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib.auth.decorators import login_required
 from AdminUI.models import StudentDB, DepartmentDB, CourseDB, JobsDB, JobApplications, newsDB, placed_studdb, Marquee, \
-    newsDB2, InterviewStep, JobStatus2
+    newsDB2, InterviewStep, JobStatus2,TrainingDB,FacultyEnrollmentDB
 from .forms import SelectionStatusForm
 from django.contrib.auth.decorators import login_required
 import FacultyUI.views
@@ -26,7 +26,7 @@ from django.http import HttpResponse
 from django.views.decorators.cache import never_cache
 
 
-# Create your views here.
+# Create your views here.x
 def redirect_authenticated_user(view_func):
     def wrapper(request, *args, **kwargs):
         if request.user.is_authenticated and request.path == reverse(main_login):
@@ -34,42 +34,59 @@ def redirect_authenticated_user(view_func):
         return view_func(request, *args, **kwargs)
     return wrapper
 
-
-
-
+@never_cache
 def main_login(request):
-    return render(request, "main_login.html")
-
-
-# def main_login2(request):
-#     return render(request, "main-login2.html")
-
-
-
-
-
-
-def main_page(request):
-    stud_id = request.session.get("username")
-    last_post = newsDB.objects.latest('newsId')
-    recent_posts = newsDB.objects.order_by('newsId')[0:5]
-    last_post2 = newsDB2.objects.latest('newsId')
-    recent_posts2 = newsDB2.objects.order_by('newsId')[0:5]
-    job_data = JobsDB.objects.all()
-    placed_posts = placed_studdb.objects.order_by('p_id')[0:30]
-    marquee_texts = Marquee.objects.all()
-
-    if stud_id:
-        name = StudentDB.objects.get(StudentId=stud_id)
-        return render(request, "main_home.html",
-                      {"name": name, "job_data": job_data, "last_post": last_post, "last_post2": last_post2,
-                       "recent_posts": recent_posts, "recent_posts2": recent_posts2,
-                       "placed_posts": placed_posts, 'marquee_texts': marquee_texts})
+    if request.session.get('username'):
+        return redirect('main_page')
     else:
-        return render(request, "main_home.html",
-                      {"job_data": job_data, "last_post": last_post, "last_post2": last_post2,
-                       "recent_posts": recent_posts, "recent_posts2": recent_posts2,
-                       "placed_posts": placed_posts, 'marquee_texts': marquee_texts})
+      return render(request, "main_login.html")
+
+# def main_login(request):
+#     if request.session.get('logged_in', False):
+#         # If the user is already logged in, redirect to the main page
+#         return redirect('main_page')
+#
+#     if "username" in request.session:
+#         username = request.session["username"]
+#         try:
+#             student = StudentDB.objects.get(StudentId=username)
+#             # Assuming 'main_page' is the name of the URL pattern for the main page
+#             return redirect('main_page')
+#         except StudentDB.DoesNotExist:
+#             # Handle the case where the user is not found in the database
+#             return render(request, "main_login.html")
+#     else:
+#         # Handle the case where the user is not logged in
+#         return render(request, "main_login.html")
+
+
+
+
+
+
+@redirect_authenticated_user
+def main_page(request):
+
+            stud_id = request.session.get("username")
+            last_post = newsDB.objects.latest('newsId')
+            recent_posts = newsDB.objects.order_by('newsId')[0:5]
+            last_post2 = newsDB2.objects.latest('newsId')
+            recent_posts2 = newsDB2.objects.order_by('newsId')[0:5]
+            job_data = JobsDB.objects.all()
+            placed_posts = placed_studdb.objects.order_by('p_id')[0:30]
+            marquee_texts = Marquee.objects.all()
+
+            if stud_id:
+                name = StudentDB.objects.get(StudentId=stud_id)
+                return render(request, "main_home.html",
+                              {"name": name, "job_data": job_data, "last_post": last_post, "last_post2": last_post2,
+                               "recent_posts": recent_posts, "recent_posts2": recent_posts2,
+                               "placed_posts": placed_posts, 'marquee_texts': marquee_texts})
+            else:
+                return render(request, "main_home.html",
+                              {"job_data": job_data, "last_post": last_post, "last_post2": last_post2,
+                               "recent_posts": recent_posts, "recent_posts2": recent_posts2,
+                               "placed_posts": placed_posts, 'marquee_texts': marquee_texts})
 
 
 def recruiter(request):
@@ -92,15 +109,27 @@ def placement(request):
 
 
 def training(request):
+    # stud_id = request.session["username"]
+    # name = StudentDB.objects.get(StudentId=stud_id)
     return render(request, "3_trainingt.html")
 
 
 def gallery(request):
-    return render(request, "4_gallery.html")
+    if 'username' in request.session:
+        stud_id = request.session["username"]
+        name = StudentDB.objects.get(StudentId=stud_id)
+        return render(request, "4_gallery.html",{'name':name})
+    else:
+        return render(request, "4_gallery.html")
 
 
 def contact(request):
-    return render(request, "6_contact.html")
+    if 'username' in request.session:
+        stud_id = request.session["username"]
+        name = StudentDB.objects.get(StudentId=stud_id)
+        return render(request, "6_contact.html",{'name':name})
+    else:
+        return render(request, "6_contact.html")
 
 
 def indexpage(request):
@@ -171,8 +200,14 @@ def stud_save(request):
 
 
 def stud_notification(request):
-    obj = newsDB.objects.all()
-    return render(request, 'notification.html', {"obj": obj})
+    if 'username' in request.session:
+        stud_id = request.session["username"]
+        name = StudentDB.objects.get(StudentId=stud_id)
+        obj = newsDB.objects.all()
+        return render(request, 'notification.html', {"obj": obj,'name':name})
+    else:
+        obj = newsDB.objects.all()
+        return render(request, 'notification.html', {"obj": obj})
 
 
 def stud_notification2(request):
@@ -183,7 +218,7 @@ def stud_notification2(request):
 def stud_user(request):
     return render(request, 'student_login.html')
 
-@redirect_authenticated_user
+# @redirect_authenticated_user
 def stud_login(request):
     if request.method == "POST":
         stud_id = request.POST.get('userid')
@@ -206,37 +241,31 @@ def stud_logout(request):
     del request.session['password']
     return redirect(main_page)
 
-
+@login_required
 def jobs_view(request):
-    job_data = JobsDB.objects.all()
-    return render(request, "jobs_view.html", {'job_data': job_data})
+    if 'username' in request.session:
+        stud_id = request.session["username"]
+        name = StudentDB.objects.get(StudentId=stud_id)
+        job_data = JobsDB.objects.all()
+        return render(request, "jobs_view.html", {'job_data': job_data,'name':name})
+    else:
+        job_data = JobsDB.objects.all()
+        return render(request, "jobs_view.html", {'job_data': job_data})
 
 
-# def jobs_view_single(request, job_id):
-#     if 'username' in request.session:
-#         stud_id = request.session["username"]
-#         job_data = JobsDB.objects.get(JobId=job_id)
-#         applied = JobApplications.objects.filter(JobId=job_id, StudentId=stud_id).exists()
-#         # messages.success(request, 'You have successfully applied for the job!')
-#         return render(request, "job_view_single.html", {'job_data': job_data, 'applied': applied})
-#     else:
-#         messages.error(request, 'Please log in to view this page.')
-#         return render(request, "main_login.html")
+
 
 def jobs_view_single(request, job_id):
     if 'username' in request.session:
         stud_id = request.session["username"]
-        student =StudentDB.objects.get(StudentId=stud_id)
+        name =StudentDB.objects.get(StudentId=stud_id)
         job_data = JobsDB.objects.get(JobId=job_id)
         applied = JobApplications.objects.filter(JobId=job_id, StudentId=stud_id).exists()
 
-        # Fetch the job status associated with the job
-        # job_status = None
-        # if job_data.status:
-        #     job_status = job_data.status.status
+
 
         return render(request, "job_view_single.html",
-                      {'job_data': job_data, 'applied': applied, 'student':student})
+                      {'job_data': job_data, 'applied': applied, 'name':name})
     else:
         messages.error(request, 'Please log in to view this page.')
         return render(request, "main_login.html")
@@ -252,10 +281,19 @@ def job_apply(request, job_id):
     return redirect(jobs_view)
 
 
-def notification_single(request, news_id):
-    news_data = newsDB.objects.get(newsId=news_id)
-    return render(request, "notification_single.html", {"news_data": news_data})
 
+def notification_single(request, news_ids):
+    if 'username' in request.session:
+        stud_id = request.session["username"]
+        name = StudentDB.objects.get(StudentId=stud_id)
+        news_data = newsDB.objects.get(newsId=news_ids)
+        applied = TrainingDB.objects.filter(newsId=news_ids, StudentId=stud_id).exists()
+
+        return render(request, "notification_single.html",
+                      {"news_data": news_data, 'applied': applied, 'name': name})
+    else:
+        messages.error(request, 'Please log in to view this page.')
+        return render(request, "main_login.html")
 
 def notification_single2(request, news_id):
     news_data = newsDB2.objects.get(newsId=news_id)
@@ -263,7 +301,12 @@ def notification_single2(request, news_id):
 
 
 def help(request):
-    return render(request, '5_help.html')
+    # if 'username' in request.session:
+    #     stud_id = request.session["username"]
+    #     name = StudentDB.objects.get(StudentId=stud_id)
+    #     return render(request, '5_help.html',{'name':name})
+    # else:
+        return render(request, '5_help.html')
 
 
 def entermail1(request):
@@ -390,70 +433,20 @@ def selection_status_view(request):
     return render(request, 'job_view_single.html', {'form': form})
 
 
-# def status_update(request,job_data):
-#     if 'username' in request.session:
-#         stud_id = request.session["username"]
-#         user_details = StudentDB.objects.get(StudentId=stud_id)
-#
-#         # Assuming you have a foreign key relationship between JobApplications and JobsDB
-#         # Adjust the relationship based on your actual models if needed
-#         job_application = JobApplications.objects.filter(StudentId=stud_id).first()
-#         if job_application:
-#             company_name = job_application.JobId.Company
-#         else:
-#             company_name = None
-#
-#         return render(request, "statusupdate.html", {'user_details': user_details, 'company_name': company_name})
-#     else:
-#         messages.error(request, 'Please log in to view this page.')
-#         return render(request, "main_login.html")
+
 def status_update(request, job_update, applied_student_id):
     job_data2 = JobsDB.objects.get(Company=job_update)
     job_steps = InterviewStep.objects.filter(job=job_data2)
-    studname = StudentDB.objects.get(FirstName=applied_student_id)
+    name = StudentDB.objects.get(FirstName=applied_student_id)
     # Fetch interview steps associated with the job
     # This assumes you have a foreign key relationship between JobsDB and InterviewStep
 
-    return render(request, "statusupdate.html", {'job_data2': job_data2, 'job_steps': job_steps,'studname':studname})
+    return render(request, "statusupdate.html", {'job_data2': job_data2, 'job_steps': job_steps,'name':name})
 
 
-# def save_status(request):
-#     if request.method == 'POST':
-#         job_status = request.POST.get('job_status')  # Get the selected job status from the form
-#         if job_status:
-#         # Assuming you have a model for job status, create a new instance and save it
-#         # You may need to adjust this part based on your actual model structure
-#             JobStatus.objects.create(status=job_status)
-#
-#             return redirect('jobs_view')  # Redirect to a success page or wherever you want
-#         else:
-#             # Handle case where job_status is missing or empty
-#             messages.success(request, " Invalid input")
-#     return render(request, 'statusupdate.html')  # If not a POST request, render the same template
 
 
-# def save_status(request):
-#     if request.method == 'POST':
-#         job_status = request.POST.get('job_status')
-#         if job_status:
-#             try:
-#                 # Attempt to create a new JobStatus instance
-#                 JobStatus.objects.create(status=job_status)
-#                 messages.success(request, "Job status saved successfully")
-#             except Exception as e:
-#                 # Handle any potential errors
-#                 messages.error(request, f"An error occurred: {str(e)}")
-#         else:
-#             messages.error(request, "Invalid input")
-#     return redirect('jobs_view')  # Redirect to jobs_view URL
 
-
-# def users_by_status(request, status):
-#     # Retrieve users based on the status
-#     users = JobsDB.objects.filter(status__status=status)
-#
-#     # Pass user data to the template
-#     return render(request, 'users_by_status.html', {'users': users})
 
 def save_status(request):
     if request.method == 'POST':
@@ -462,25 +455,44 @@ def save_status(request):
         company = request.POST.get('Company')
         student_name = request.POST.get('FirstName')  # Assuming this is the ID of the student associated with the job
         selected_step_id = request.POST.get('job_steps')
+        course = request.POST.get('CourseName')
+        # course_obj = get_object_or_404(CourseDB,CourseName=course)
 
-        # Get the job object based on the title
-        job = JobsDB.objects.get(Title=job_title, Company=company)
+        # Get or create the job object based on the title and company
+        job, _ = JobsDB.objects.get_or_create(Title=job_title, Company=company)
 
-        Student = StudentDB.objects.get(FirstName=student_name)
-        # Student_ins=Student.FirstName
-        # print(Student_ins)
-        # Get the student object based on the first name
-        # Student = get_object_or_404(StudentDB, FirstName=student_name)
+        # Get or create the course object based on the course name
+        course_obj = CourseDB.objects.get(CourseName=course)
+
+        # Get or create the student object based on the student name
+        student, _ = StudentDB.objects.get_or_create(FirstName=student_name)
 
         # Get the selected interview step object
         selected_step = InterviewStep.objects.get(id=selected_step_id)
-        print(selected_step)
 
-        # Create a new job status associated with the job and selected step
-        JobStatus2.objects.create(job=job, status_text=selected_step.step_text, Student=Student.FirstName)
 
-        # Redirect to a success page
+        # Update or create a new job status associated with the job and selected step
+        job_status, created = JobStatus2.objects.update_or_create(
+            job=job,
+
+            defaults={
+                'status_text': selected_step.step_text,
+                'Student': student.FirstName,
+                'course' : course_obj
+
+            }
+        )
+
+        # Redirect to a success page or do something else
         return redirect('jobs_view')  # Adjust the URL name as needed
     else:
         # Handle GET requests if needed
         pass
+
+def applytraining(request,trainID):
+    stud_id = request.session["username"]
+    name = StudentDB.objects.get(StudentId=stud_id)
+    news = newsDB.objects.get(newsId=trainID)
+    obj =TrainingDB(newsId=news, StudentId=name)
+    obj.save()
+    return redirect(stud_notification)

@@ -63,6 +63,12 @@ urlpatterns = [
     path('marquee_list/', views.marquee_list, name='marquee_list'),
     path('delete/<int:marquee_id>/', views.delete_marquee, name='delete_marquee'),
     path('job_details/', views.job_details, name='job_details'),
+    path('statussearch/', views.statussearch, name='statussearch'),
+    path('search_studentstatus/', views.search_studentstatus, name="search_studentstatus"),
+    path('delete-status/<int:status_id>/', views.delete_status, name='delete_status'),
+    path('search_trainings/', views.search_trainings, name="search_trainings"),
+
+
 ]
 
 

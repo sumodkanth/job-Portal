@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
-
-
+import pytz
+from django.utils import timezone
 # Create your models here.
 
 
@@ -13,8 +13,11 @@ class DepartmentDB(models.Model):
 class CourseDB(models.Model):
     CourseId = models.AutoField(primary_key=True)
     CourseName = models.CharField(max_length=20)
-    DeptId = models.ForeignKey(DepartmentDB, on_delete=models.CASCADE)
+    DeptId = models.ForeignKey(DepartmentDB, on_delete=models.CASCADE,null=True,blank=True)
     Description = models.TextField()
+
+    def __str__(self):
+        return self.CourseName
 
 
 class StudentDB(models.Model):
@@ -35,6 +38,8 @@ class StudentDB(models.Model):
     Pancard = models.CharField(max_length=50, null=True, blank=True)
     adhaar = models.CharField(max_length=50, null=True, blank=True)
     password = models.CharField(max_length=50, null=True, blank=True)
+    def __str__(self):
+        return self.FirstName
 
 
 class FacultyEnrollmentDB(models.Model):
@@ -114,5 +119,14 @@ class JobStatus2(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     Student = models.CharField(max_length=255, null=True, blank=True)
+    course = models.ForeignKey(CourseDB, on_delete=models.CASCADE, null=True, blank=True)
+
     def __str__(self):
         return f"Status: {self.status_text} "
+
+
+class TrainingDB(models.Model):
+    newsId = models.ForeignKey(newsDB, on_delete=models.CASCADE)
+    StudentId = models.ForeignKey(StudentDB, on_delete=models.CASCADE)
+    def __str__(self):
+        return f"Status: {self.StudentId} "

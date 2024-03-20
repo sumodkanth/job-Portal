@@ -7,9 +7,9 @@ from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.utils.datastructures import MultiValueDictKeyError
-
+from django.contrib import messages
 from AdminUI.models import DepartmentDB, CourseDB, StudentDB, FacultyEnrollmentDB, JobsDB, JobApplications, newsDB, \
-    placed_studdb, Marquee, newsDB2, InterviewStep, JobStatus2
+    placed_studdb, Marquee, newsDB2, InterviewStep, JobStatus2,TrainingDB
 from FacultyUI.models import FacultyDB
 from .forms import MarqueeForm
 import pandas as pd
@@ -18,12 +18,25 @@ import pandas as pd
 
 
 def admin_indexpage(request):
-    return render(request, "adminindex.html")
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+
+        return render(request,'adminindex.html',{'name': name})
+    else:
+        return redirect('main_page')
+
+
+
 
 
 def add_dept(request):
-    return render(request, "AddDepartment.html")
-
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        return render(request, "AddDepartment.html",{'name': name})
+    else:
+        return redirect('main_page')
 
 def submit_dept(request):
     if request.method == "POST":
@@ -34,13 +47,23 @@ def submit_dept(request):
 
 
 def view_dept(request):
-    data = DepartmentDB.objects.all()
-    return render(request, "ViewDepartments.html", {"data": data})
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        data = DepartmentDB.objects.all()
+        return render(request, "ViewDepartments.html", {"data": data,'name':name})
+    else:
+        return redirect('main_page')
 
 
 def edit_dept(request, dataid):
-    data = DepartmentDB.objects.get(DeptId=dataid)
-    return render(request, "EditDepartment.html", {"data": data})
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        data = DepartmentDB.objects.get(DeptId=dataid)
+        return render(request, "EditDepartment.html", {"data": data,'name':name})
+    else:
+        return redirect('main_page')
 
 
 def update_dept(request, dataid):
@@ -48,6 +71,8 @@ def update_dept(request, dataid):
         dep = request.POST.get("deptname")
         DepartmentDB.objects.filter(DeptId=dataid).update(DeptName=dep)
         return redirect(view_dept)
+    else:
+        return redirect('main_page')
 
 
 def delete_dept(request, dataid):
@@ -57,8 +82,13 @@ def delete_dept(request, dataid):
 
 
 def add_course(request):
-    data = DepartmentDB.objects.all()
-    return render(request, "AddCourse.html", {'data': data})
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        data = DepartmentDB.objects.all()
+        return render(request, "AddCourse.html", {'data': data,'name':name})
+    else:
+        return redirect('main_page')
 
 
 def submit_course(request):
@@ -76,8 +106,13 @@ def submit_course(request):
 
 
 def view_course(request):
-    data = CourseDB.objects.all()
-    return render(request, "ViewCourse.html", {"data": data})
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        data = CourseDB.objects.all()
+        return render(request, "ViewCourse.html", {"data": data,'name':name})
+    else:
+        return redirect('main_page')
 
 
 def edit_course(request, dataid):
@@ -107,12 +142,22 @@ def delete_course(request, dataid):
 
 
 def add_student(request):
-    data = CourseDB.objects.all()
-    return render(request, "AddStudent.html", {"data": data})
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        data = CourseDB.objects.all()
+        return render(request, "AddStudent.html", {"data": data,"name":name})
+    else:
+        return redirect('main_page')
 
 def add_student2(request):
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
 
-    return render(request, "AddStudentsExcel.html")
+        return render(request, "AddStudentsExcel.html",{"name":name})
+    else:
+        return redirect('main_page')
 def submit_student(request):
     if request.method == "POST":
         fname = request.POST.get("fname")
@@ -176,18 +221,25 @@ def submit_student_from_excel(request):
 
 
 def view_students(request):
-    data = CourseDB.objects.all()
-    stud_data = StudentDB.objects.all()
-    years = []
-    for i in stud_data:
-        year = i.EnrollDate.year
-        years.append(year)
-    print(years)
-    return render(request, "ViewStudents.html", {"data": data, "years": years})
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        data = CourseDB.objects.all()
+        stud_data = StudentDB.objects.all()
+        years = []
+        for i in stud_data:
+            year = i.EnrollDate.year
+            years.append(year)
+        print(years)
+        return render(request, "ViewStudents.html", {"data": data, "years": years,"name":name})
+    else:
+        return redirect('main_page')
 
 
 def search_students(request):
     if request.method == "POST":
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
         course = request.POST.get("course")
         course_data = CourseDB.objects.get(CourseName=course)
         print(course_data)
@@ -195,14 +247,17 @@ def search_students(request):
         year = request.POST.get("year")
         data = StudentDB.objects.filter(CourseId=cours, EnrollDate__year=year)
         print(course)
-        return render(request, "ViewStudentsCourseWise.html", {"data": data, "course": course})
-
+        return render(request, "ViewStudentsCourseWise.html", {"data": data, "course": course,'name':name})
+    else:
+        return redirect('main_page')
 
 def view_single_student(request, dataid):
-    data = StudentDB.objects.get(StudentId=dataid)
-    course_data = CourseDB.objects.all()
-    return render(request, "ViewSingleStudent.html", {"data": data, "course_data": course_data})
-
+    if 'username' in request.session:
+        data = StudentDB.objects.get(StudentId=dataid)
+        course_data = CourseDB.objects.all()
+        return render(request, "ViewSingleStudent.html", {"data": data, "course_data": course_data})
+    else:
+        return redirect('main_page')
 
 def update_student(request, dataid):
     if request.method == "POST":
@@ -245,9 +300,13 @@ def delete_student(request, dataid):
 
 
 def add_faculty(request):
-    data = DepartmentDB.objects.all()
-    return render(request, "AddFaculty.html", {"data": data})
-
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        data = DepartmentDB.objects.all()
+        return render(request, "AddFaculty.html", {"data": data,"name":name})
+    else:
+        return redirect('main_page')
 
 def submit_faculty(request):
     if request.method == "POST":
@@ -272,28 +331,38 @@ def submit_faculty(request):
 
 
 def view_faculties(request):
-    data = FacultyEnrollmentDB.objects.all()
-    return render(request, "ViewFaculties.html", {"data": data})
-
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        data = FacultyEnrollmentDB.objects.all()
+        return render(request, "ViewFaculties.html", {"data": data,'name':name})
+    else:
+        return redirect('main_page')
 
 def search_faculties(request):
     if request.method == "POST":
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
         dept = request.POST.get("dept")
         dept_data = DepartmentDB.objects.get(DeptName=dept)
         dep = dept_data.DeptId
         data = FacultyEnrollmentDB.objects.filter(DeptId=dep)
-        return render(request, "ViewFacultyDepWise.html", {"data": data, "dept": dept})
+        return render(request, "ViewFacultyDepWise.html", {"data": data, "dept": dept,'name':name})
 
 
 def view_single_faculty(request, dataid):
-    data = FacultyEnrollmentDB.objects.get(FacultyID=dataid)
-    try:
-        dat = FacultyDB.objects.get(FacultyID=dataid)
-    except FacultyDB.DoesNotExist:
-        dat = None
-    dep_data = DepartmentDB.objects.all()
-    return render(request, "ViewSingleFaculty.html", {"data": data, "dep_data": dep_data, "dat": dat})
-
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        data = FacultyEnrollmentDB.objects.get(FacultyID=dataid)
+        try:
+            dat = FacultyDB.objects.get(FacultyID=dataid)
+        except FacultyDB.DoesNotExist:
+            dat = None
+        dep_data = DepartmentDB.objects.all()
+        return render(request, "ViewSingleFaculty.html", {"data": data, "dep_data": dep_data, "dat": dat,"name":name})
+    else:
+        return redirect('main_page')
 
 def admin_signin(request):
     if request.method == "POST":
@@ -328,8 +397,13 @@ def admin_login(request):
 
 
 def add_job(request):
-    return render(request, "AddJobOpenings.html")
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        return render(request, "AddJobOpenings.html",{'name':name})
 
+    else:
+        return redirect('main_page')
 
 # def job_save(request):
 #     if request.method == "POST":
@@ -372,9 +446,13 @@ def job_save(request):
 
 
 def view_jobs(request):
-    job_data = JobsDB.objects.all()
-    return render(request, "ViewJobs.html", {'job_data': job_data})
-
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        job_data = JobsDB.objects.all()
+        return render(request, "ViewJobs.html", {'job_data': job_data,'name':name})
+    else:
+        return redirect('main_page')
 
 def job_delete(request, data_id):
     job_data = JobsDB.objects.filter(JobId=data_id)
@@ -391,9 +469,13 @@ def job_delete(request, data_id):
 
 
 def view_job_single(request, data_id):
-    job_data = JobsDB.objects.get(JobId=data_id)
-    return render(request, "ViewJobSingle.html", {'job_data': job_data})
-
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        job_data = JobsDB.objects.get(JobId=data_id)
+        return render(request, "ViewJobSingle.html", {'job_data': job_data,'name':name})
+    else:
+        return redirect('main_page')
 
 def update_job(request, job_id):
     if request.method == "POST":
@@ -410,10 +492,15 @@ def update_job(request, job_id):
 
 
 def job_applications(request, job_id):
-    job_data = JobsDB.objects.get(JobId=job_id)
-    # job_statuses = JobStatus2.get(job=job_id)
-    applications = JobApplications.objects.filter(JobId=job_data)
-    return render(request, "JobApplications.html", {'applications': applications,'job_statuses':job_statuses})
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        job_data = JobsDB.objects.get(JobId=job_id)
+        # job_statuses = JobStatus2.get(job=job_id)
+        applications = JobApplications.objects.filter(JobId=job_data)
+        return render(request, "JobApplications.html", {'applications': applications,'name':name})
+    else:
+        return redirect('main_page')
 
 
 def resume_download(request, stud_id, job_id):
@@ -424,19 +511,33 @@ def resume_download(request, stud_id, job_id):
 
 
 def application_single(request, dataid):
-    data = StudentDB.objects.get(StudentId=dataid)
-    course_data = CourseDB.objects.all()
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        data = StudentDB.objects.get(StudentId=dataid)
+        course_data = CourseDB.objects.all()
 
-    return render(request, "ApplicationDetail.html", {"data": data, "course_data": course_data})
+        return render(request, "ApplicationDetail.html", {"data": data, "course_data": course_data,'name':name})
+    else:
+        return redirect('main_page')
 
 
 def add_news(request):
-    return render(request, "add_news.html")
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        return render(request, "add_news.html",{'name':name})
+    else:
+        return redirect('main_page')
 
 
 def add_news2(request):
-    return render(request, "addnews2.html")
-
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        return render(request, "addnews2.html",{'name':name})
+    else:
+        return redirect('main_page')
 
 def news_save(request):
     if request.method == "POST":
@@ -469,14 +570,24 @@ def news_save2(request):
 
 
 def news_view(request):
-    obj = newsDB.objects.all()
-    return render(request, "news_view.html", {"obj": obj})
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        obj = newsDB.objects.all()
+        return render(request, "news_view.html", {"obj": obj,'name':name})
+
+    else:
+        return redirect('main_page')
 
 
 def news_view2(request):
-    obj = newsDB2.objects.all()
-    return render(request, "viewnews2.html", {"obj": obj})
-
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        obj = newsDB2.objects.all()
+        return render(request, "viewnews2.html", {"obj": obj,'name':name})
+    else:
+        return redirect('main_page')
 
 def news_delete(request, data_id):
     job_data = newsDB.objects.filter(newsId=data_id)
@@ -491,8 +602,12 @@ def news_delete2(request, data_id):
 
 
 def placed(request):
-    return render(request, "placed.html")
-
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        return render(request, "placed.html",{'name':name})
+    else:
+        return redirect('main_page')
 
 def add_placed(request):
     if request.method == "POST":
@@ -507,9 +622,13 @@ def add_placed(request):
 
 
 def display_placed(request):
-    data = placed_studdb.objects.all()
-    return render(request, "display_placed.html", {'data': data})
-
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        data = placed_studdb.objects.all()
+        return render(request, "display_placed.html", {'data': data,"name":name})
+    else:
+        return redirect('main_page')
 
 def placed_delete(request, data_id):
     placed_data = placed_studdb.objects.filter(p_id=data_id)
@@ -518,19 +637,30 @@ def placed_delete(request, data_id):
 
 
 def add_marquee(request):
-    if request.method == 'POST':
-        form = MarqueeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('marquee_list')  # Redirect to view page after saving
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        if request.method == 'POST':
+            form = MarqueeForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('marquee_list')  # Redirect to view page after saving
+        else:
+            form = MarqueeForm()
+        return render(request, 'AddAlerts.html', {'form': form,'name':name})
     else:
-        form = MarqueeForm()
-    return render(request, 'AddAlerts.html', {'form': form})
-
+        return redirect('main_page')
 
 def marquee_list(request):
-    marquee_list = Marquee.objects.all()
-    return render(request, 'ViewAlerts.html', {'marquee_list': marquee_list})
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        marquee_list = Marquee.objects.all()
+        return render(request, 'ViewAlerts.html', {'marquee_list': marquee_list,"name":name})
+    else:
+        return redirect('main_page')
+
+
 
 
 def delete_marquee(request, marquee_id):
@@ -549,8 +679,100 @@ def delete_marquee(request, marquee_id):
 
 
 def job_details(request):
-    # Retrieve the job status object based on the job_status_id
+    if 'username' in request.session:
+        # Retrieve the job status object based on the job_status_id
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        job_statuses = JobStatus2.objects.all()
+        # Pass job status to the template for rendering
+        return render(request, 'job_status_detail.html', {'job_status': job_statuses,'name':name})
+    else:
+        return redirect('main_page')
+def statussearch(request):
+    if 'username' in request.session:
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        data = CourseDB.objects.all()
+        data2 = TrainingDB.objects.all()
+        stud_data = StudentDB.objects.all()
+        years = []
+        for i in stud_data:
+            year = i.EnrollDate.year
+            years.append(year)
+        print(years)
+        return render(request, "dashboard.html", {"data": data,"data2":data2,'name':name})
+    else:
+        return redirect('main_page')
 
-    job_statuses = JobStatus2.objects.all()
-    # Pass job status to the template for rendering
-    return render(request, 'job_status_detail.html', {'job_status': job_statuses})
+
+def search_studentstatus(request):
+    if request.method == 'POST':
+        course_name = request.POST.get('course')
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+
+        # Filter job statuses based on the selected course
+        job_statuses = JobStatus2.objects.filter(course__CourseName=course_name)
+
+        context = {
+            'course_name': course_name,
+            'job_statuses': job_statuses,
+            'name':name
+        }
+        return render(request, 'Viewstudentstatus.html', context)
+    else:
+        courses = CourseDB.objects.all()
+        return render(request, 'dashboard.html', {'data': courses})
+from django.db.models import Max
+
+def delete_status(request, status_id):
+    # Retrieve the JobStatus2 object to be deleted
+    status = get_object_or_404(JobStatus2, pk=status_id)
+
+    # Delete the status
+    status.delete()
+
+    # Redirect back to the same page or any other appropriate page
+    return redirect('search_studentstatus')  # Adjust the URL name as needed
+
+
+def search_trainings(request):
+    if request.method == 'POST':
+        training_name = request.POST.get('training')
+        fac_name = request.session["username"]
+        name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
+        # Filter job statuses based on the selected course
+        status = TrainingDB.objects.filter(newsId__news_Title=training_name)
+
+        context = {
+            'training_name': training_name,
+            'status': status,
+            "name":name
+        }
+        return render(request, 'Viewstudentsname.html', context)
+    else:
+        courses = CourseDB.objects.all()
+        return render(request, 'dashboard.html', {'data': courses})
+
+# def delete_training(request, training_id):
+#    if request.method == 'POST':
+#         try:
+#             # Retrieve the TrainingDB object to delete
+#             training = TrainingDB.objects.get(pk=training_id)
+#             # Delete the object
+#             training.delete()
+#             messages.success(request, 'Training status deleted successfully.')
+#         except TrainingDB.DoesNotExist:
+#             messages.error(request, 'Training status does not exist.')
+#     return redirect('search_trainings')
+
+# def delete_training(request, training_id):
+#     training = get_object_or_404(TrainingDB, pk=training_id)
+#             # Retrieve the TrainingDB object to delete
+#             # training = TrainingDB.objects.get(pk=training_id)
+#             # Delete the object
+#     training.delete()
+#         #     messages.success(request, 'Training status deleted successfully.')
+#         # except TrainingDB.DoesNotExist:
+#         #     messages.error(request, 'Training status does not exist.')
+#     return redirect('search_trainings')

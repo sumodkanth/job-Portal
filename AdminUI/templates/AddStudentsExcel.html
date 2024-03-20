@@ -1,6 +1,6 @@
 {% extends 'adminindex.html' %}
 
-{% block content %}
+{% block content %}{% if request.session.username %}
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -20,5 +20,5 @@
             </div>
         </div>
     </div>
-</div>
+</div>{% endif %}
 {% endblock %}

@@ -43,6 +43,7 @@
         <ul class="nav">
           <li class="nav-item profile">
             <div class="profile-desc">
+              {% if request.session.username %}
               <div class="profile-pic">
                 <div class="count-indicator">
                   <img class="img-xs rounded-circle " src="{{name.Image.url}}" alt="">
@@ -53,6 +54,18 @@
                   <span>Gold Member</span>
                 </div>
               </div>
+              {% else %}
+                            <div class="profile-pic">
+                <div class="count-indicator">
+                  <img class="img-xs rounded-circle " src="{% static 'assets/images/faces/face28.jpg' %}" alt="">
+                  <span class="count bg-success"></span>
+                </div>
+                <div class="profile-name">
+                  <h5 class="mb-0 font-weight-normal" style="color: black;">No user</h5>
+                  <span>Gold Member</span>
+                </div>
+              </div>
+              {% endif %}
               <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
               <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
                 <a href="#" class="dropdown-item preview-item">
@@ -90,6 +103,7 @@
               </div>
             </div>
           </li>
+          {% if request.session.username %}
           <li class="nav-item nav-category">
             <span class="nav-link">Navigation</span>
           </li>
@@ -141,6 +155,16 @@
               <span class="menu-title">Job Portal</span>
             </a>
           </li>
+          {% else %}
+                    <li class="nav-item menu-items">
+            <a class="nav-link" href="{% url 'main_login' %}">
+              <span class="menu-icon">
+                <i class="mdi mdi-login"></i>
+              </span>
+              <span class="menu-title">Login</span>
+            </a>
+          </li>
+          {% endif %}
         </ul>
       </nav>
       <!-- partial -->

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
+<body>{% if request.session.username %}
 <div class="card-body" style="background-color: gray;">
     <h4 class="card-title">Add News</h4>
     <br>
@@ -38,7 +38,7 @@
 
         <button class="btn btn-primary mr-2" type="submit">Submit</button>
     </form>
-</div>
+</div>{% endif %}
 </body>
 </html>
 {% endblock %}

@@ -23,10 +23,13 @@ from django.views.decorators.cache import never_cache
 
 @never_cache
 def mainlogin2(request):
-
+    if 'username' in request.session:
+        fid = request.session["username"]
+        f_data = FacultyEnrollmentDB.objects.get(FacultyID=fid)
+        return redirect('admin_indexpage')
+    else:
         return render(request, "main-login2.html")
-    # else:
-    #     return render(request,'faculty_index.html')
+
 
 
 def faculty_login(request):
@@ -100,7 +103,8 @@ def profile_edit(request):
         f_data = get_faculty_data(request)
         return render(request, "faculty_profile_edit.html", {'f_data': f_data, 'enroll_data': enroll_data})
     else:
-        return render(request, "faculty_profile_edit.html", {'enroll_data': enroll_data})
+        f_data = None
+        return render(request, "faculty_profile_edit.html", {'f_data': f_data,'enroll_data': enroll_data})
 
 
 def profile_save(request):
@@ -140,6 +144,70 @@ def profile_save(request):
         messages.success(request, "Profile Updated")
         return redirect(profile_page)
 
+# def profile_save(request):
+#     if request.method == "POST":
+#         # Get enrollment data for the faculty
+#         # Assuming you have a function named `get_enrollment_data`
+#         f_data = get_enrollment_data(request)
+#
+#         # Retrieve various fields from the POST request
+#         fid = f_data.faculty_id_id  # Assuming 'faculty_id' is the ForeignKey field in FacultyEnrollmentDB
+#         name = request.POST.get("name")
+#         jdate = f_data.Joined
+#         dob = request.POST.get("dob")
+#         cont = request.POST.get("contact")
+#         altcont = request.POST.get("altcontact")
+#         addr = request.POST.get("address")
+#         mail = request.POST.get("email")
+#         bname = request.POST.get("bank")
+#         accnum = request.POST.get("accnum")
+#         ifsc = request.POST.get("ifsc")
+#
+#         # Check if there are existing faculty data
+#         if FacultyDB.objects.filter(FacultyID=fid).exists():
+#             # Update existing faculty data
+#             faculty_data = FacultyDB.objects.get(FacultyID=fid)
+#             file = None
+#             try:
+#                 img = request.FILES["image"]
+#                 fs = FileSystemStorage()
+#                 file = fs.save(img.name, img)
+#             except MultiValueDictKeyError:
+#                 pass
+#             faculty_data.DoB = dob
+#             faculty_data.AltContact = altcont
+#             faculty_data.Address = addr
+#             faculty_data.Email = mail
+#             faculty_data.Bank = bname
+#             faculty_data.Acc_Number = accnum
+#             faculty_data.IFSC = ifsc
+#             if file:
+#                 faculty_data.Photo = file
+#             faculty_data.save()
+#
+#             # Update faculty enrollment data
+#             FacultyEnrollmentDB.objects.filter(faculty_id=fid).update(Name=name, Contact=cont)
+#         else:
+#             # Create new faculty data
+#             img = request.FILES["image"]
+#             obj = FacultyDB(FacultyID=fid,
+#                             DoB=dob,
+#                             AltContact=altcont,
+#                             Address=addr,
+#                             Email=mail,
+#                             Bank=bname,
+#                             Acc_Number=accnum,
+#                             IFSC=ifsc,
+#                             Photo=img)
+#             obj.save()
+#             # Update faculty enrollment data
+#             FacultyEnrollmentDB.objects.filter(faculty_id=fid).update(Name=name, Contact=cont)
+#
+#         # Send success message to the user
+#         messages.success(request, "Profile Updated")
+#
+#         # Redirect the user to the profile page
+#         return redirect(profile_page)
 
 def students_view(request):
     data = CourseDB.objects.all()

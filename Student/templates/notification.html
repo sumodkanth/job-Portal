@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+
 {% extends 'studentindex.html' %}
 {% load static %}
 <head>
@@ -30,7 +29,7 @@
               <td> {{i.news_Location}}</td>
               <td> {{i.news_date}}</td>
               <td>
-                <a href="{% url 'notification_single' news_id=i.newsId %}">More details...</i></a>&nbsp;&nbsp;
+                <a href="{% url 'notification_single' news_ids=i.newsId %}">More details...</i></a>&nbsp;&nbsp;
             </td>
             </tr>
             {% endfor %}
@@ -42,5 +41,3 @@
     </div>
   </div>
 {% endblock %}
-</body>
-</html>

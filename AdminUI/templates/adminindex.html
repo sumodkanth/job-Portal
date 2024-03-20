@@ -37,16 +37,31 @@
         <ul class="nav" >
           <li class="nav-item profile">
             <div class="profile-desc">
+              {% if request.session.username %}
               <div class="profile-pic">
                 <div class="count-indicator">
                   <img class="img-xs rounded-circle " src="{% static 'assets/images/faces/face15.jpg' %}" alt="">
                   <span class="count bg-success"></span>
                 </div>
+
                 <div class="profile-name">
-                  <h5 class="mb-0 font-weight-normal" style="color: black;">Ryban</h5>
+                  <h5 class="mb-0 font-weight-normal" style="color: black;">{{name.Name}}</h5>
+                  <span>Gold Member</span>
+                </div>
+                </div>
+                {% else %}
+              <div class="profile-pic">
+                <div class="count-indicator">
+                  <img class="img-xs rounded-circle " src="{% static 'assets/images/faces/face28.jpg' %}" alt="">
+                  <span class="count bg-success"></span>
+                </div>
+                <div class="profile-name">
+                  <h5 class="mb-0 font-weight-normal" style="color: black;">No user</h5>
                   <span>Gold Member</span>
                 </div>
               </div>
+                {% endif %}
+
               <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
               <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
                 <a href="#" class="dropdown-item preview-item">
@@ -89,7 +104,7 @@
             <span class="nav-link">Navigation</span>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="{% url 'faculty_profile' %}">
+            <a class="nav-link" href="{% url 'statussearch' %}">
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
               </span>
@@ -106,7 +121,7 @@
             </a>
             <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="{% url 'add_student' %}">Add Students</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'add_student' %}" >Add Students</a></li>
                 <li class="nav-item"> <a class="nav-link" href="{% url 'add_student2' %}">Add Students using Excel</a></li>
                 <li class="nav-item"> <a class="nav-link" href="{% url 'view_students' %}">View Students</a></li>
               </ul>
@@ -241,7 +256,7 @@
 
           {% else %}
           <li class="nav-item menu-items">
-            <a class="nav-link" href="{% url 'admin_login' %}">
+            <a class="nav-link" href="{% url 'main-login2' %}">
               <span class="menu-icon">
                 <i class="mdi mdi-login"></i>
               </span>
@@ -323,12 +338,14 @@
 
             {% block content %}
 
-
+{% if request.session.username %}
  <div class="col-lg-8">
     <p class="lead" style="color: black;">A job portal on a college website is a valuable resource for students and alumni in their job search and career development. It aims to bridge the gap between education and the professional world by providing access to job opportunities and career-related support.</p>
->
-</div>
 
+</div>
+{% else %}
+            <p style="color:black; font-size:30px;">Please Login to Access this page</p>
+{% endif %}
 
             {% endblock %}
 

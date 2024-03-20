@@ -35,7 +35,13 @@
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label"><h5>Name :</h5></label>
                 <div class="col-sm-9">
-                    <h5 class="col-form-label">{{studname.FirstName}} {{studname.LastName}}</h5>
+                    <h5 class="col-form-label">{{name.FirstName}} {{name.LastName}}</h5>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"><h5>Course:</h5></label>
+                <div class="col-sm-9">
+                    <h5 class="col-form-label">{{name.CourseId.CourseName}}</h5>
                 </div>
             </div>
             <div class="form-group row">
@@ -61,7 +67,8 @@
                 <!-- Hidden input field to store job title -->
                 <input type="hidden" name="job_title" value="{{ job_data2.Title }}">
                 <input type="hidden" name="Company" value="{{ job_data2.Company }}">
-                <input type="hidden" name="FirstName" value="{{studname.FirstName}}">
+                <input type="hidden" name="FirstName" value="{{name.FirstName}}">
+                <input type="hidden" name="CourseName" value="{{name.CourseId.CourseName}}">
                 <label for="exampleFormControlSelect1" class="form-label">Update the current job interview status here:</label><br>
                 {% for step in job_steps %}
                 <div class="form-check">
