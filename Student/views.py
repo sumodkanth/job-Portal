@@ -241,7 +241,7 @@ def stud_logout(request):
     del request.session['password']
     return redirect(main_page)
 
-@login_required
+
 def jobs_view(request):
     if 'username' in request.session:
         stud_id = request.session["username"]

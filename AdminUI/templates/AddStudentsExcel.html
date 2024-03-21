@@ -8,17 +8,28 @@
                 <div class="card-header" style="text-color:black;">Upload Excel File To add the student details</div>
 
                 <div class="card-body">
-                    <form method="post" action="{% url 'submit_student2'%}" enctype="multipart/form-data">
+                    <form method="post" action="{% url 'submit_student2'%}" enctype="multipart/form-data" id="uploadForm">
                         {% csrf_token %}
                         <div class="form-group">
-                            <label for="excelFile">Choose Excel File:</label>
-                            <input type="file" class="form-control-file" id="excelFile" name="excel_file">
+                            <label for="excelFile">It must be a xlsx file format:</label>
+                            <input type="file" class="form-control-file" id="excelFile" name="excel_file" onchange="showUploadButton()">
                         </div>
-                        <button type="submit" class="btn btn-primary">Upload</button>
+                        <button type="submit" class="btn btn-primary" id="uploadBtn" style="display: none;">Upload</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>{% endif %}
+<script>
+function showUploadButton() {
+    var fileInput = document.getElementById('excelFile');
+    var uploadButton = document.getElementById('uploadBtn');
+    if (fileInput.files.length > 0) {
+        uploadButton.style.display = 'block';
+    } else {
+        uploadButton.style.display = 'none';
+    }
+}
+</script>
 {% endblock %}
