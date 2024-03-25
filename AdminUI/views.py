@@ -226,10 +226,10 @@ def view_students(request):
         name = FacultyEnrollmentDB.objects.get(FacultyID=fac_name)
         data = CourseDB.objects.all()
         stud_data = StudentDB.objects.all()
-        years = []
+        years = set()
         for i in stud_data:
             year = i.EnrollDate.year
-            years.append(year)
+            years.add(year)  # Using a set ensures unique years
         print(years)
         return render(request, "ViewStudents.html", {"data": data, "years": years,"name":name})
     else:
